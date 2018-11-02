@@ -21,19 +21,20 @@
 //valójában double buffered, ha az egyik sort kirakja, a másikat lehet írni
 byte cycles[CYCLE_NUM * LEDS_NUM] =
 {
-	10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	
 };
 
 //az aktuális ciklus meddig legyen kint (egység: PWM frekvencia. Pl. 180 = kb. 1sec)
 byte wait[CYCLE_NUM] =
 {
-	180,
-	180
+	10,
+	10
 };
 
 byte cycle_idx = 0; //animáció aktuális állapotát határozza meg ("anim" tömbben egy sort (LEDS_NUM bájtot) jelöl ki)
+byte buffer_offset = 0; //cycles tömbben segít a címzésben (lényegében mindig cycle_idx * 13)
 byte led_idx = 0; //a felvillantandó LED-et címzi
 byte on_off = 0; //éppen be (1) vagy ki (0) kell kapcsolni az adott LED-et
 byte off_time = 0; //ennyi ideig kell majd kikapcsolva tartani (PWM-off time)
@@ -49,9 +50,9 @@ int main(void)
 	MCUCR |= 0x40; // pullup disable (PUD) -> if pin is configured input, the pin goes High-Z
 	LED_OFF();
 	TCCR0A = 0; //normalest normal mode
-	TCCR0B = 0x40; //256 prescaler
+	TCCR0B = 0x04; //256 prescaler
 	TCNT0 = 250; //Ezt csak random beállítjuk, hogy (majdnem) azonnal lejárjon
-	TIMSK0 = 0x20; //TOIE0: Timer/Counter0 Overflow Interrupt Enable
+	TIMSK0 = 0x02; //TOIE0: Timer/Counter0 Overflow Interrupt Enable
 
 	sei();
 
@@ -83,7 +84,7 @@ int main(void)
 					cycles[calc_offset + i] = 15;
 				}
 			}
-			wait[calc_offset] = 180;	//1 sec
+			wait[cycle_idx] = 10;	//1 sec = 180
 
 			calc_state++;
 			if (calc_state >= 13) calc_state = 0;  //Itt annyit kell írni a feltételbe, ahány állapota van az animációnak
@@ -99,7 +100,6 @@ int main(void)
 
 ISR(TIM0_OVF_vect)
 {
-	
 	if ((on_off & 1) == 0)
 	{
 		//OFF
@@ -110,14 +110,16 @@ ISR(TIM0_OVF_vect)
 	else
 	{
 		//ON
-		if (cycles[cycle_idx] == 0) //Ha a fenyero min, nem kell semmit bekapcsolni, azonnal off állapotba megyünk
+		if (cycles[buffer_offset + led_idx] == 0) //Ha a fenyero min, nem kell semmit bekapcsolni, azonnal off állapotba megyünk
 		{
-			TIFR0 |= 0x02; //Set TOV0
+			//TIFR0 |= 0x02; //Set TOV0
+			TCNT0 = 256 - 16;
+			LED_OFF();
 		}
 		else
 		{
-			TCNT0 = 256 - cycles[cycle_idx];			//ennyi ideig kell bekapcsolni a ledet
-			off_time = 256 - (16 - cycles[cycle_idx]); //kikapcs idõt is kiszámoljuk
+			TCNT0 = 256 - cycles[buffer_offset + led_idx];			//ennyi ideig kell bekapcsolni a ledet
+			off_time = 256 - (16 - cycles[buffer_offset + led_idx]); //kikapcs idõt is kiszámoljuk
 			switch (led_idx)
 			{
 				case(0): LED0_ON(); break;
@@ -136,7 +138,9 @@ ISR(TIM0_OVF_vect)
 				default: led_idx = 0; break; //error
 			}
 		}
-		if (cycles[cycle_idx] < 15) //Ha a fenyero max, nem kell majd a off-ba menni
+
+		//Ha a fenyero max vagy min, nem kell majd off-ba menni
+		if (cycles[buffer_offset + led_idx] < 15 && cycles[buffer_offset + led_idx] > 0)
 		{
 			on_off = 0;
 		}
@@ -151,10 +155,12 @@ ISR(TIM0_OVF_vect)
 			{
 				//vége a várakozásnak, mehet a következõ kép
 				cycle_idx++;
-				if (cycle_idx > CYCLE_NUM)
+				buffer_offset += 13;
+				if (cycle_idx >= CYCLE_NUM)
 				{
 					//a teljes animáció lement, kezdjük elõrõl
 					cycle_idx = 0;
+					buffer_offset = 0;
 					//és jelezzük, hogy az "anim" puffer felsõ felét fel lehet tölteni
 					calc_event = 2;
 				}
