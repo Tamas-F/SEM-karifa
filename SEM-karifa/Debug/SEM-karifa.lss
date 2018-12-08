@@ -1,0 +1,642 @@
+
+SEM-karifa.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         00000a10  00000000  00000000  00000094  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000012  00800060  00000a10  00000aa4  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .bss          00000011  00800072  00800072  00000ab6  2**0
+                  ALLOC
+  3 .comment      00000030  00000000  00000000  00000ab6  2**0
+                  CONTENTS, READONLY
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000ae8  2**2
+                  CONTENTS, READONLY
+  5 .debug_aranges 00000028  00000000  00000000  00000b24  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_info   0000087f  00000000  00000000  00000b4c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_abbrev 00000580  00000000  00000000  000013cb  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_line   000003b0  00000000  00000000  0000194b  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_frame  00000070  00000000  00000000  00001cfc  2**2
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_str    0000039f  00000000  00000000  00001d6c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_loc    000003f7  00000000  00000000  0000210b  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 12 .debug_ranges 00000030  00000000  00000000  00002502  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	f8 c3       	rjmp	.+2032   	; 0x7f2 <__ctors_end>
+   2:	12 c4       	rjmp	.+2084   	; 0x828 <__bad_interrupt>
+   4:	11 c4       	rjmp	.+2082   	; 0x828 <__bad_interrupt>
+   6:	10 c4       	rjmp	.+2080   	; 0x828 <__bad_interrupt>
+   8:	0f c4       	rjmp	.+2078   	; 0x828 <__bad_interrupt>
+   a:	0e c4       	rjmp	.+2076   	; 0x828 <__bad_interrupt>
+   c:	0d c4       	rjmp	.+2074   	; 0x828 <__bad_interrupt>
+   e:	0c c4       	rjmp	.+2072   	; 0x828 <__bad_interrupt>
+  10:	0b c4       	rjmp	.+2070   	; 0x828 <__bad_interrupt>
+  12:	0a c4       	rjmp	.+2068   	; 0x828 <__bad_interrupt>
+  14:	09 c4       	rjmp	.+2066   	; 0x828 <__bad_interrupt>
+  16:	27 c4       	rjmp	.+2126   	; 0x866 <__vector_11>
+  18:	07 c4       	rjmp	.+2062   	; 0x828 <__bad_interrupt>
+  1a:	06 c4       	rjmp	.+2060   	; 0x828 <__bad_interrupt>
+  1c:	05 c4       	rjmp	.+2058   	; 0x828 <__bad_interrupt>
+  1e:	04 c4       	rjmp	.+2056   	; 0x828 <__bad_interrupt>
+  20:	03 c4       	rjmp	.+2054   	; 0x828 <__bad_interrupt>
+
+00000022 <__trampolines_end>:
+  22:	0f 00       	.word	0x000f	; ????
+	...
+  30:	01 ff       	sbrs	r16, 1
+  32:	01 00       	.word	0x0001	; ????
+	...
+  3c:	00 00       	nop
+  3e:	0f 08       	sbc	r0, r15
+  40:	00 ff       	sbrs	r16, 0
+  42:	01 00       	.word	0x0001	; ????
+	...
+  4c:	00 0f       	add	r16, r16
+  4e:	08 00       	.word	0x0008	; ????
+  50:	00 ff       	sbrs	r16, 0
+  52:	01 00       	.word	0x0001	; ????
+	...
+  5c:	0f 08       	sbc	r0, r15
+  5e:	00 00       	nop
+  60:	00 ff       	sbrs	r16, 0
+  62:	01 00       	.word	0x0001	; ????
+  64:	00 00       	nop
+  66:	00 00       	nop
+  68:	00 00       	nop
+  6a:	00 0f       	add	r16, r16
+  6c:	08 00       	.word	0x0008	; ????
+  6e:	00 00       	nop
+  70:	00 ff       	sbrs	r16, 0
+  72:	01 00       	.word	0x0001	; ????
+  74:	00 00       	nop
+  76:	00 00       	nop
+  78:	00 00       	nop
+  7a:	0f 08       	sbc	r0, r15
+  7c:	00 00       	nop
+  7e:	00 00       	nop
+  80:	00 ff       	sbrs	r16, 0
+  82:	00 00       	nop
+  84:	00 00       	nop
+  86:	00 00       	nop
+  88:	01 0f       	add	r16, r17
+  8a:	08 00       	.word	0x0008	; ????
+	...
+  94:	00 00       	nop
+  96:	01 ff       	sbrs	r16, 1
+  98:	0f 08       	sbc	r0, r15
+	...
+  a2:	00 00       	nop
+  a4:	01 ff       	sbrs	r16, 1
+  a6:	00 0f       	add	r16, r16
+  a8:	08 00       	.word	0x0008	; ????
+	...
+  b2:	01 ff       	sbrs	r16, 1
+  b4:	00 00       	nop
+  b6:	0f 08       	sbc	r0, r15
+	...
+  c0:	01 ff       	sbrs	r16, 1
+  c2:	00 00       	nop
+  c4:	00 0f       	add	r16, r16
+  c6:	08 00       	.word	0x0008	; ????
+  c8:	00 00       	nop
+  ca:	00 00       	nop
+  cc:	00 00       	nop
+  ce:	01 ff       	sbrs	r16, 1
+  d0:	00 00       	nop
+  d2:	00 00       	nop
+  d4:	0f 08       	sbc	r0, r15
+  d6:	00 00       	nop
+  d8:	00 00       	nop
+  da:	00 00       	nop
+  dc:	01 ff       	sbrs	r16, 1
+  de:	00 00       	nop
+  e0:	00 00       	nop
+  e2:	00 0f       	add	r16, r16
+  e4:	08 01       	movw	r0, r16
+  e6:	00 00       	nop
+  e8:	00 00       	nop
+  ea:	00 ff       	sbrs	r16, 0
+  ec:	00 00       	nop
+  ee:	00 00       	nop
+  f0:	00 00       	nop
+  f2:	0f 08       	sbc	r0, r15
+	...
+  fc:	00 00       	nop
+  fe:	0f 00       	.word	0x000f	; ????
+ 100:	00 01       	movw	r0, r0
+ 102:	0c 00       	.word	0x000c	; ????
+	...
+ 10c:	00 00       	nop
+ 10e:	0f 00       	.word	0x000f	; ????
+ 110:	01 0c       	add	r0, r1
+	...
+ 11e:	0f 01       	movw	r0, r30
+ 120:	0c 00       	.word	0x000c	; ????
+	...
+ 12e:	00 78       	andi	r16, 0x80	; 128
+ 130:	0f 00       	.word	0x000f	; ????
+	...
+
+000007f2 <__ctors_end>:
+ 7f2:	11 24       	eor	r1, r1
+ 7f4:	1f be       	out	0x3f, r1	; 63
+ 7f6:	cf e5       	ldi	r28, 0x5F	; 95
+ 7f8:	d1 e0       	ldi	r29, 0x01	; 1
+ 7fa:	de bf       	out	0x3e, r29	; 62
+ 7fc:	cd bf       	out	0x3d, r28	; 61
+
+000007fe <__do_copy_data>:
+ 7fe:	10 e0       	ldi	r17, 0x00	; 0
+ 800:	a0 e6       	ldi	r26, 0x60	; 96
+ 802:	b0 e0       	ldi	r27, 0x00	; 0
+ 804:	e0 e1       	ldi	r30, 0x10	; 16
+ 806:	fa e0       	ldi	r31, 0x0A	; 10
+ 808:	02 c0       	rjmp	.+4      	; 0x80e <__do_copy_data+0x10>
+ 80a:	05 90       	lpm	r0, Z+
+ 80c:	0d 92       	st	X+, r0
+ 80e:	a2 37       	cpi	r26, 0x72	; 114
+ 810:	b1 07       	cpc	r27, r17
+ 812:	d9 f7       	brne	.-10     	; 0x80a <__do_copy_data+0xc>
+
+00000814 <__do_clear_bss>:
+ 814:	20 e0       	ldi	r18, 0x00	; 0
+ 816:	a2 e7       	ldi	r26, 0x72	; 114
+ 818:	b0 e0       	ldi	r27, 0x00	; 0
+ 81a:	01 c0       	rjmp	.+2      	; 0x81e <.do_clear_bss_start>
+
+0000081c <.do_clear_bss_loop>:
+ 81c:	1d 92       	st	X+, r1
+
+0000081e <.do_clear_bss_start>:
+ 81e:	a3 38       	cpi	r26, 0x83	; 131
+ 820:	b2 07       	cpc	r27, r18
+ 822:	e1 f7       	brne	.-8      	; 0x81c <.do_clear_bss_loop>
+ 824:	02 d0       	rcall	.+4      	; 0x82a <main>
+ 826:	f2 c0       	rjmp	.+484    	; 0xa0c <_exit>
+
+00000828 <__bad_interrupt>:
+ 828:	eb cb       	rjmp	.-2090   	; 0x0 <__vectors>
+
+0000082a <main>:
+byte wait_cnt = 0;
+byte copyNextAnim = 0;
+
+int main(void)
+{
+	if (pgm_read_byte(&(anims[1000])))
+ 82a:	ea e0       	ldi	r30, 0x0A	; 10
+ 82c:	f4 e0       	ldi	r31, 0x04	; 4
+ 82e:	e4 91       	lpm	r30, Z
+ 830:	ee 23       	and	r30, r30
+ 832:	19 f0       	breq	.+6      	; 0x83a <main+0x10>
+		animcnt = 1;
+ 834:	81 e0       	ldi	r24, 0x01	; 1
+ 836:	80 93 82 00 	sts	0x0082, r24	; 0x800082 <animcnt>
+	DDRB=0x03;
+ 83a:	83 e0       	ldi	r24, 0x03	; 3
+ 83c:	87 bb       	out	0x17, r24	; 23
+	PORTB=0x02 | 0x04;
+ 83e:	86 e0       	ldi	r24, 0x06	; 6
+ 840:	88 bb       	out	0x18, r24	; 24
+	DDRA=0xff;
+ 842:	9f ef       	ldi	r25, 0xFF	; 255
+ 844:	9a bb       	out	0x1a, r25	; 26
+	PORTA=0xFF;
+ 846:	9b bb       	out	0x1b, r25	; 27
+	ACSR=0x80; //disable adc
+ 848:	90 e8       	ldi	r25, 0x80	; 128
+ 84a:	98 b9       	out	0x08, r25	; 8
+	DIDR0 = 0x06;
+ 84c:	81 b9       	out	0x01, r24	; 1
+	ADCSRA=0x00;
+ 84e:	16 b8       	out	0x06, r1	; 6
+	PRR = 0x0B;
+ 850:	8b e0       	ldi	r24, 0x0B	; 11
+ 852:	80 b9       	out	0x00, r24	; 0
+
+	TCCR0A = 0; //normalest normal mode
+ 854:	10 be       	out	0x30, r1	; 48
+	TCCR0B = 0x04; //256 prescaler
+ 856:	84 e0       	ldi	r24, 0x04	; 4
+ 858:	83 bf       	out	0x33, r24	; 51
+	TCNT0 = 250; //Ezt csak random beállítjuk, hogy (majdnem) azonnal lejárjon
+ 85a:	8a ef       	ldi	r24, 0xFA	; 250
+ 85c:	82 bf       	out	0x32, r24	; 50
+	TIMSK0 = 0x01; //TOIE0: Timer/Counter0 Overflow Interrupt Enable
+ 85e:	81 e0       	ldi	r24, 0x01	; 1
+ 860:	89 bf       	out	0x39, r24	; 57
+	
+	sei();
+ 862:	78 94       	sei
+ 864:	ff cf       	rjmp	.-2      	; 0x864 <main+0x3a>
+
+00000866 <__vector_11>:
+	}
+}
+
+enum Oldal oldal = BAL;
+ISR(TIM0_OVF_vect)
+{
+ 866:	1f 92       	push	r1
+ 868:	0f 92       	push	r0
+ 86a:	0f b6       	in	r0, 0x3f	; 63
+ 86c:	0f 92       	push	r0
+ 86e:	11 24       	eor	r1, r1
+ 870:	2f 93       	push	r18
+ 872:	3f 93       	push	r19
+ 874:	4f 93       	push	r20
+ 876:	5f 93       	push	r21
+ 878:	8f 93       	push	r24
+ 87a:	9f 93       	push	r25
+ 87c:	af 93       	push	r26
+ 87e:	bf 93       	push	r27
+ 880:	ef 93       	push	r30
+ 882:	ff 93       	push	r31
+	//PORTA = 0xFF;
+	byte idx_min = 0;
+	byte idx_max = 5;
+	byte out = 0;
+	if (oldal == BAL)
+ 884:	80 91 72 00 	lds	r24, 0x0072	; 0x800072 <__data_end>
+ 888:	81 11       	cpse	r24, r1
+ 88a:	1a c0       	rjmp	.+52     	; 0x8c0 <__vector_11+0x5a>
+	{
+		PORTA = 0;
+ 88c:	1b ba       	out	0x1b, r1	; 27
+		oldal = JOBB;
+ 88e:	81 e0       	ldi	r24, 0x01	; 1
+ 890:	80 93 72 00 	sts	0x0072, r24	; 0x800072 <__data_end>
+	*reg |= bv(bit);
+}
+
+static inline void bit_clr(volatile byte *reg, byte bit)
+{
+	*reg &= ~bv(bit);
+ 894:	c0 98       	cbi	0x18, 0	; 24
+	return 1 << bit;
+}
+
+static inline void bit_set(volatile byte *reg, byte bit)
+{
+	*reg |= bv(bit);
+ 896:	c1 9a       	sbi	0x18, 1	; 24
+		set_oldal_bal();
+		pwmshift <<= 1;
+ 898:	80 91 70 00 	lds	r24, 0x0070	; 0x800070 <pwmshift>
+ 89c:	88 0f       	add	r24, r24
+ 89e:	80 93 70 00 	sts	0x0070, r24	; 0x800070 <pwmshift>
+		pwmcnt++;
+ 8a2:	80 91 71 00 	lds	r24, 0x0071	; 0x800071 <pwmcnt>
+ 8a6:	8f 5f       	subi	r24, 0xFF	; 255
+		if (pwmcnt >= 4)
+ 8a8:	84 30       	cpi	r24, 0x04	; 4
+ 8aa:	08 f4       	brcc	.+2      	; 0x8ae <__vector_11+0x48>
+ 8ac:	8c c0       	rjmp	.+280    	; 0x9c6 <__vector_11+0x160>
+		{
+			pwmcnt = 0;
+ 8ae:	10 92 71 00 	sts	0x0071, r1	; 0x800071 <pwmcnt>
+			pwmshift = 0xFF;
+ 8b2:	8f ef       	ldi	r24, 0xFF	; 255
+ 8b4:	80 93 70 00 	sts	0x0070, r24	; 0x800070 <pwmshift>
+ISR(TIM0_OVF_vect)
+{
+	//PORTA = 0xFF;
+	byte idx_min = 0;
+	byte idx_max = 5;
+	byte out = 0;
+ 8b8:	90 e0       	ldi	r25, 0x00	; 0
+enum Oldal oldal = BAL;
+ISR(TIM0_OVF_vect)
+{
+	//PORTA = 0xFF;
+	byte idx_min = 0;
+	byte idx_max = 5;
+ 8ba:	45 e0       	ldi	r20, 0x05	; 5
+
+enum Oldal oldal = BAL;
+ISR(TIM0_OVF_vect)
+{
+	//PORTA = 0xFF;
+	byte idx_min = 0;
+ 8bc:	20 e0       	ldi	r18, 0x00	; 0
+ 8be:	88 c0       	rjmp	.+272    	; 0x9d0 <__vector_11+0x16a>
+			pwmshift = 0xFF;
+		}
+	}
+	else
+	{
+		oldal = BAL;
+ 8c0:	10 92 72 00 	sts	0x0072, r1	; 0x800072 <__data_end>
+		PORTA = 0;
+ 8c4:	1b ba       	out	0x1b, r1	; 27
+ 8c6:	c0 9a       	sbi	0x18, 0	; 24
+}
+
+static inline void bit_clr(volatile byte *reg, byte bit)
+{
+	*reg &= ~bv(bit);
+ 8c8:	c1 98       	cbi	0x18, 1	; 24
+		set_oldal_jobb();
+		idx_min = 6;
+		idx_max = 11;
+		out = (anim_out[12] & 0x1) << 1; //top led
+ 8ca:	e5 e7       	ldi	r30, 0x75	; 117
+ 8cc:	f0 e0       	ldi	r31, 0x00	; 0
+ 8ce:	84 85       	ldd	r24, Z+12	; 0x0c
+ 8d0:	98 2f       	mov	r25, r24
+ 8d2:	91 70       	andi	r25, 0x01	; 1
+ 8d4:	99 0f       	add	r25, r25
+		anim_out[12] >>= 1;
+ 8d6:	86 95       	lsr	r24
+ 8d8:	84 87       	std	Z+12, r24	; 0x0c
+	{
+		oldal = BAL;
+		PORTA = 0;
+		set_oldal_jobb();
+		idx_min = 6;
+		idx_max = 11;
+ 8da:	4b e0       	ldi	r20, 0x0B	; 11
+	else
+	{
+		oldal = BAL;
+		PORTA = 0;
+		set_oldal_jobb();
+		idx_min = 6;
+ 8dc:	26 e0       	ldi	r18, 0x06	; 6
+ 8de:	78 c0       	rjmp	.+240    	; 0x9d0 <__vector_11+0x16a>
+	}
+	TCNT0 = pwmshift;
+
+	for (byte i = idx_min; i <= idx_max; i++)
+	{
+		out |= (anim_out[i] & 0x1);
+ 8e0:	e2 2f       	mov	r30, r18
+ 8e2:	f0 e0       	ldi	r31, 0x00	; 0
+ 8e4:	eb 58       	subi	r30, 0x8B	; 139
+ 8e6:	ff 4f       	sbci	r31, 0xFF	; 255
+ 8e8:	80 81       	ld	r24, Z
+ 8ea:	38 2f       	mov	r19, r24
+ 8ec:	31 70       	andi	r19, 0x01	; 1
+ 8ee:	93 2b       	or	r25, r19
+		out <<= 1;
+ 8f0:	99 0f       	add	r25, r25
+		anim_out[i] >>= 1;
+ 8f2:	86 95       	lsr	r24
+ 8f4:	80 83       	st	Z, r24
+		out = (anim_out[12] & 0x1) << 1; //top led
+		anim_out[12] >>= 1;
+	}
+	TCNT0 = pwmshift;
+
+	for (byte i = idx_min; i <= idx_max; i++)
+ 8f6:	2f 5f       	subi	r18, 0xFF	; 255
+ 8f8:	42 17       	cp	r20, r18
+ 8fa:	90 f7       	brcc	.-28     	; 0x8e0 <__vector_11+0x7a>
+	{
+		out |= (anim_out[i] & 0x1);
+		out <<= 1;
+		anim_out[i] >>= 1;
+	}
+	PORTA = out;
+ 8fc:	9b bb       	out	0x1b, r25	; 27
+	
+	
+	byte i;
+	if (pwmcnt == 3 && oldal == BAL) //kövi lépésben új animáció kerül ki
+ 8fe:	80 91 71 00 	lds	r24, 0x0071	; 0x800071 <pwmcnt>
+ 902:	83 30       	cpi	r24, 0x03	; 3
+ 904:	09 f0       	breq	.+2      	; 0x908 <__vector_11+0xa2>
+ 906:	73 c0       	rjmp	.+230    	; 0x9ee <__vector_11+0x188>
+ 908:	80 91 72 00 	lds	r24, 0x0072	; 0x800072 <__data_end>
+ 90c:	81 11       	cpse	r24, r1
+ 90e:	6f c0       	rjmp	.+222    	; 0x9ee <__vector_11+0x188>
+	{
+		//most lesz idõnk számolni
+		wait_cnt++;
+ 910:	80 91 73 00 	lds	r24, 0x0073	; 0x800073 <wait_cnt>
+ 914:	8f 5f       	subi	r24, 0xFF	; 255
+ 916:	80 93 73 00 	sts	0x0073, r24	; 0x800073 <wait_cnt>
+		if (wait_cnt == anim_now[14])
+ 91a:	90 91 6e 00 	lds	r25, 0x006E	; 0x80006e <__data_start+0xe>
+ 91e:	89 13       	cpse	r24, r25
+ 920:	44 c0       	rjmp	.+136    	; 0x9aa <__vector_11+0x144>
+		{
+			wait_cnt = 0;
+ 922:	10 92 73 00 	sts	0x0073, r1	; 0x800073 <wait_cnt>
+			repeat_cnt++;
+ 926:	80 91 74 00 	lds	r24, 0x0074	; 0x800074 <repeat_cnt>
+ 92a:	8f 5f       	subi	r24, 0xFF	; 255
+ 92c:	80 93 74 00 	sts	0x0074, r24	; 0x800074 <repeat_cnt>
+			if (repeat_cnt == anim_now[13])
+ 930:	90 91 6d 00 	lds	r25, 0x006D	; 0x80006d <__data_start+0xd>
+ 934:	89 13       	cpse	r24, r25
+ 936:	50 c0       	rjmp	.+160    	; 0x9d8 <__vector_11+0x172>
+			{
+				repeat_cnt = 0;
+ 938:	10 92 74 00 	sts	0x0074, r1	; 0x800074 <repeat_cnt>
+				anim_idx += 15;
+ 93c:	80 91 6f 00 	lds	r24, 0x006F	; 0x80006f <anim_idx>
+ 940:	81 5f       	subi	r24, 0xF1	; 241
+				if (anim_idx >= ANIM_NUM * ANIM_BYTES)
+ 942:	82 3d       	cpi	r24, 0xD2	; 210
+ 944:	18 f4       	brcc	.+6      	; 0x94c <__vector_11+0xe6>
+			wait_cnt = 0;
+			repeat_cnt++;
+			if (repeat_cnt == anim_now[13])
+			{
+				repeat_cnt = 0;
+				anim_idx += 15;
+ 946:	80 93 6f 00 	sts	0x006F, r24	; 0x80006f <anim_idx>
+ 94a:	02 c0       	rjmp	.+4      	; 0x950 <__vector_11+0xea>
+				if (anim_idx >= ANIM_NUM * ANIM_BYTES)
+				{
+					anim_idx = 0;
+ 94c:	10 92 6f 00 	sts	0x006F, r1	; 0x80006f <anim_idx>
+				}
+				if (pgm_read_byte(&anims[anim_idx + 13]) == 0)
+ 950:	e0 91 6f 00 	lds	r30, 0x006F	; 0x80006f <anim_idx>
+ 954:	f0 e0       	ldi	r31, 0x00	; 0
+ 956:	e1 5d       	subi	r30, 0xD1	; 209
+ 958:	ff 4f       	sbci	r31, 0xFF	; 255
+ 95a:	e4 91       	lpm	r30, Z
+ 95c:	e1 11       	cpse	r30, r1
+ 95e:	3c c0       	rjmp	.+120    	; 0x9d8 <__vector_11+0x172>
+ 960:	e0 e6       	ldi	r30, 0x60	; 96
+ 962:	f0 e0       	ldi	r31, 0x00	; 0
+ 964:	8d e6       	ldi	r24, 0x6D	; 109
+ 966:	90 e0       	ldi	r25, 0x00	; 0
+				{
+					for (i = 0; i < 13; i++)
+					{
+						anim_now[i] = 0;
+ 968:	11 92       	st	Z+, r1
+				{
+					anim_idx = 0;
+				}
+				if (pgm_read_byte(&anims[anim_idx + 13]) == 0)
+				{
+					for (i = 0; i < 13; i++)
+ 96a:	e8 17       	cp	r30, r24
+ 96c:	f9 07       	cpc	r31, r25
+ 96e:	e1 f7       	brne	.-8      	; 0x968 <__vector_11+0x102>
+ 970:	33 c0       	rjmp	.+102    	; 0x9d8 <__vector_11+0x172>
+					}
+				}
+			}
+			for (i = 0; i < 13; i++)
+			{
+				anim_now[i] += pgm_read_byte(&anims[anim_idx + i]);
+ 972:	84 91       	lpm	r24, Z
+ 974:	9c 91       	ld	r25, X
+ 976:	89 0f       	add	r24, r25
+ 978:	8d 93       	st	X+, r24
+ 97a:	31 96       	adiw	r30, 0x01	; 1
+					{
+						anim_now[i] = 0;
+					}
+				}
+			}
+			for (i = 0; i < 13; i++)
+ 97c:	a2 17       	cp	r26, r18
+ 97e:	b3 07       	cpc	r27, r19
+ 980:	c1 f7       	brne	.-16     	; 0x972 <__vector_11+0x10c>
+			{
+				anim_now[i] += pgm_read_byte(&anims[anim_idx + i]);
+			}
+			anim_now[13] = pgm_read_byte(&anims[anim_idx + 13]);
+ 982:	fa 01       	movw	r30, r20
+ 984:	e1 5d       	subi	r30, 0xD1	; 209
+ 986:	ff 4f       	sbci	r31, 0xFF	; 255
+ 988:	84 91       	lpm	r24, Z
+ 98a:	a0 e6       	ldi	r26, 0x60	; 96
+ 98c:	b0 e0       	ldi	r27, 0x00	; 0
+ 98e:	1d 96       	adiw	r26, 0x0d	; 13
+ 990:	8c 93       	st	X, r24
+ 992:	1d 97       	sbiw	r26, 0x0d	; 13
+			anim_now[14] = pgm_read_byte(&anims[anim_idx + 14]);
+ 994:	fa 01       	movw	r30, r20
+ 996:	e0 5d       	subi	r30, 0xD0	; 208
+ 998:	ff 4f       	sbci	r31, 0xFF	; 255
+ 99a:	44 91       	lpm	r20, Z
+ 99c:	1e 96       	adiw	r26, 0x0e	; 14
+ 99e:	4c 93       	st	X, r20
+			if (anim_now[13] == 0) anim_now[13] = 1;
+ 9a0:	81 11       	cpse	r24, r1
+ 9a2:	03 c0       	rjmp	.+6      	; 0x9aa <__vector_11+0x144>
+ 9a4:	81 e0       	ldi	r24, 0x01	; 1
+ 9a6:	80 93 6d 00 	sts	0x006D, r24	; 0x80006d <__data_start+0xd>
+		}
+		anim_out[0] = 0;
+ 9aa:	10 92 75 00 	sts	0x0075, r1	; 0x800075 <anim_out>
+ 9ae:	e0 e6       	ldi	r30, 0x60	; 96
+ 9b0:	f0 e0       	ldi	r31, 0x00	; 0
+ 9b2:	a5 e7       	ldi	r26, 0x75	; 117
+ 9b4:	b0 e0       	ldi	r27, 0x00	; 0
+ 9b6:	2d e6       	ldi	r18, 0x6D	; 109
+ 9b8:	30 e0       	ldi	r19, 0x00	; 0
+		for (i = 0; i < 13; i++)
+		{
+			anim_out[i] = anim_now[i];
+ 9ba:	81 91       	ld	r24, Z+
+ 9bc:	8d 93       	st	X+, r24
+			anim_now[13] = pgm_read_byte(&anims[anim_idx + 13]);
+			anim_now[14] = pgm_read_byte(&anims[anim_idx + 14]);
+			if (anim_now[13] == 0) anim_now[13] = 1;
+		}
+		anim_out[0] = 0;
+		for (i = 0; i < 13; i++)
+ 9be:	2e 17       	cp	r18, r30
+ 9c0:	3f 07       	cpc	r19, r31
+ 9c2:	d9 f7       	brne	.-10     	; 0x9ba <__vector_11+0x154>
+ 9c4:	14 c0       	rjmp	.+40     	; 0x9ee <__vector_11+0x188>
+	{
+		PORTA = 0;
+		oldal = JOBB;
+		set_oldal_bal();
+		pwmshift <<= 1;
+		pwmcnt++;
+ 9c6:	80 93 71 00 	sts	0x0071, r24	; 0x800071 <pwmcnt>
+ISR(TIM0_OVF_vect)
+{
+	//PORTA = 0xFF;
+	byte idx_min = 0;
+	byte idx_max = 5;
+	byte out = 0;
+ 9ca:	90 e0       	ldi	r25, 0x00	; 0
+enum Oldal oldal = BAL;
+ISR(TIM0_OVF_vect)
+{
+	//PORTA = 0xFF;
+	byte idx_min = 0;
+	byte idx_max = 5;
+ 9cc:	45 e0       	ldi	r20, 0x05	; 5
+
+enum Oldal oldal = BAL;
+ISR(TIM0_OVF_vect)
+{
+	//PORTA = 0xFF;
+	byte idx_min = 0;
+ 9ce:	20 e0       	ldi	r18, 0x00	; 0
+		idx_min = 6;
+		idx_max = 11;
+		out = (anim_out[12] & 0x1) << 1; //top led
+		anim_out[12] >>= 1;
+	}
+	TCNT0 = pwmshift;
+ 9d0:	80 91 70 00 	lds	r24, 0x0070	; 0x800070 <pwmshift>
+ 9d4:	82 bf       	out	0x32, r24	; 50
+ 9d6:	84 cf       	rjmp	.-248    	; 0x8e0 <__vector_11+0x7a>
+					}
+				}
+			}
+			for (i = 0; i < 13; i++)
+			{
+				anim_now[i] += pgm_read_byte(&anims[anim_idx + i]);
+ 9d8:	40 91 6f 00 	lds	r20, 0x006F	; 0x80006f <anim_idx>
+ 9dc:	50 e0       	ldi	r21, 0x00	; 0
+ 9de:	fa 01       	movw	r30, r20
+ 9e0:	ee 5d       	subi	r30, 0xDE	; 222
+ 9e2:	ff 4f       	sbci	r31, 0xFF	; 255
+ 9e4:	a0 e6       	ldi	r26, 0x60	; 96
+ 9e6:	b0 e0       	ldi	r27, 0x00	; 0
+ 9e8:	2d e6       	ldi	r18, 0x6D	; 109
+ 9ea:	30 e0       	ldi	r19, 0x00	; 0
+ 9ec:	c2 cf       	rjmp	.-124    	; 0x972 <__vector_11+0x10c>
+		{
+			anim_out[i] = anim_now[i];
+		}
+	}
+	
+}
+ 9ee:	ff 91       	pop	r31
+ 9f0:	ef 91       	pop	r30
+ 9f2:	bf 91       	pop	r27
+ 9f4:	af 91       	pop	r26
+ 9f6:	9f 91       	pop	r25
+ 9f8:	8f 91       	pop	r24
+ 9fa:	5f 91       	pop	r21
+ 9fc:	4f 91       	pop	r20
+ 9fe:	3f 91       	pop	r19
+ a00:	2f 91       	pop	r18
+ a02:	0f 90       	pop	r0
+ a04:	0f be       	out	0x3f, r0	; 63
+ a06:	0f 90       	pop	r0
+ a08:	1f 90       	pop	r1
+ a0a:	18 95       	reti
+
+00000a0c <_exit>:
+ a0c:	f8 94       	cli
+
+00000a0e <__stop_program>:
+ a0e:	ff cf       	rjmp	.-2      	; 0xa0e <__stop_program>
