@@ -10,7 +10,7 @@
 #define BATTERYMETER_H_
 
 void batteryMeasure();
-
+void initAD();
 
 
 

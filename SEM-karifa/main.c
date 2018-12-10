@@ -16,6 +16,7 @@
 #include "commons.h"
 #include "leds.h"
 #include "buttons.h"
+#include "batterymeter.h"
 #define ido	100
 
 enum Oldal{BAL = 0, JOBB};
@@ -65,10 +66,10 @@ void init_peripherals()
 	PORTB=0x02 | 0x04;
 	DDRA=0xFF;
 	PORTA=0x00;
-	ACSR=0x80; //disable adc
-	DIDR0 = 0x06;
-	ADCSRA=0x00;
-	PRR = 0x0B;
+	//ACSR=0x80; //disable adc
+	//DIDR0 = 0x06;
+	//ADCSRA=0x00;
+	//PRR = 0x0B;
 
 	TCCR0A = 0; //normalest normal mode
 	TCCR0B = 0x04; //256 prescaler
@@ -135,6 +136,14 @@ int main(void)
 	init_peripherals();
 	init_main();
 	button0_init();
+	
+	initAD();
+	PORTA = 0;
+	while(1)
+	{
+		batteryMeasure();
+		_delay_ms(100);
+	}
 	
 	sei();
 	
