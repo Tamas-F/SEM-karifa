@@ -43,7 +43,7 @@ static inline dword bit_get(volatile byte *reg, byte bit)
 	return *reg & bv(bit);
 }
 
-static inline void bit_wrt(byte val,volatile  byte *reg, byte bit)
+static inline void bit_wrt(byte val, volatile  byte *reg, byte bit)
 {
 	val ? bit_set(reg, bit) : bit_clr(reg, bit);
 }
@@ -54,5 +54,18 @@ static inline void _nop()
 	asm volatile ("nop");
 }
 
+static inline void tmr_dec_byte(volatile byte *tmr)
+{
+	if((*tmr) > 0) {
+		(*tmr)--;
+	}
+}
+
+static inline void tmr_dec_word(volatile word *tmr)
+{
+	if((*tmr) > 0) {
+		(*tmr)--;
+	}
+}
 
 #endif /* COMMONS_H_ */
