@@ -21,29 +21,33 @@
 
 enum Oldal{BAL = 0, JOBB};
 
-#define ANIM_NUM	2
+#define ANIM_NUM	3
 #define ANIM_BYTES	15
-const PROGMEM byte anims_start[ANIM_NUM + 1] = {0, 14*ANIM_BYTES, 16*ANIM_BYTES};
+const PROGMEM word anims_start[ANIM_NUM + 1] = {0, 14*ANIM_BYTES, 16*ANIM_BYTES, 19*ANIM_BYTES};
 
 const PROGMEM byte anims[] = {//120 = 1 sec
-	15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /*ismétlés*/ 0, /*várakozás*/ 1,
-	-1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 130/15,
-	0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 130/15,
-	0, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 130/15,
-	0, 0, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 130/15,
-	0, 0, 0, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 130/15,
-	0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 1, /*ismétlés*/ 15, /*várakozás*/ 130/15,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, /*ismétlés*/ 15, /*várakozás*/ 130/15,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0, /*ismétlés*/ 15, /*várakozás*/ 130/15,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 130/15,
-	0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 130/15,
-	0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 130/15,
-	0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 130/15,
-	1, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 130/15,
-	//14
-	15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, /*ismétlés*/ 0, /*várakozás*/ 130,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /*ismétlés*/ 0, /*várakozás*/ 130,
-	//14 + 2 = 16
+	15,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	/*ismétlés*/	0,	/*várakozás*/	1,
+	-1,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	/*ismétlés*/	15,	/*várakozás*/	130/15,
+	0,	-1,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	/*ismétlés*/	15,	/*várakozás*/	130/15,
+	0,	0,	-1,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	/*ismétlés*/	15,	/*várakozás*/	130/15,
+	0,	0,	0,	-1,	1,	0,	0,	0,	0,	0,	0,	0,	0,	/*ismétlés*/	15,	/*várakozás*/	130/15,
+	0,	0,	0,	0,	-1,	1,	0,	0,	0,	0,	0,	0,	0,	/*ismétlés*/	15,	/*várakozás*/	130/15,
+	0,	0,	0,	0,	0,	-1,	0,	0,	0,	0,	0,	0,	1,	/*ismétlés*/	15,	/*várakozás*/	130/15,
+	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	-1,	/*ismétlés*/	15,	/*várakozás*/	130/15,
+	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	-1,	0,	/*ismétlés*/	15,	/*várakozás*/	130/15,
+	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	-1,	0,	0,	/*ismétlés*/	15,	/*várakozás*/	130/15,
+	0,	0,	0,	0,	0,	0,	0,	0,	1,	-1,	0,	0,	0,	/*ismétlés*/	15,	/*várakozás*/	130/15,
+	0,	0,	0,	0,	0,	0,	0,	1,	-1,	0,	0,	0,	0,	/*ismétlés*/	15,	/*várakozás*/	130/15,
+	0,	0,	0,	0,	0,	0,	1,	-1,	0,	0,	0,	0,	0,	/*ismétlés*/	15,	/*várakozás*/	130/15,
+	1,	0,	0,	0,	0,	0,	-1,	0,	0,	0,	0,	0,	0,	/*ismétlés*/	15,	/*várakozás*/	130/15,
+	//14 => 14
+	15,	15,	15,	15,	15,	15,	15,	15,	15,	15,	15,	15,	15,	/*ismétlés*/	0,	/*várakozás*/	130,
+	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	/*ismétlés*/	0,	/*várakozás*/	130,
+	//2 => 16
+	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	/*ismétlés*/	0,	/*várakozás*/	1,
+	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	/*ismétlés*/	15,	/*várakozás*/	130/8,
+	-1,	-1,	-1,	-1,	-1,	-1,	-1,	-1,	-1,	-1,	-1,	-1,	-1,	/*ismétlés*/	15,	/*várakozás*/	130/8,
+	//3 => 19
 };
 
 byte anim_manual[15] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1};
@@ -192,12 +196,10 @@ void switch_mode(byte newmode)
 	switch (newmode)
 	{
 		case 0:
-			anim_manual_enable = 0;
-			anims_start_idx = 0;
-		break;
 		case 1:
+		case 2:
 			anim_manual_enable = 0;
-			anims_start_idx = 1;
+			anims_start_idx = newmode;
 		break;
 		default:
 			mode = 0;
@@ -253,10 +255,12 @@ int main(void)
 				switch (mode)
 				{
 					case 0:
-					switch_mode(1);
-					break;
 					case 1:
-					switch_mode(0);
+					case 2:
+						if (mode == 2)
+							switch_mode(0);
+						else
+							switch_mode(mode + 1);
 					break;
 					default:
 						switch_mode(0);
@@ -361,9 +365,9 @@ ISR(TIM0_OVF_vect)
 				{
 					repeat_cnt = 0;
 					anim_idx += 15;
-					if (anim_idx >= pgm_read_byte(&anims_start[anims_start_idx + 1]))
+					if (anim_idx >= pgm_read_word(&anims_start[anims_start_idx + 1]))
 					{
-						anim_idx = pgm_read_byte(&anims_start[anims_start_idx]);
+						anim_idx = pgm_read_word(&anims_start[anims_start_idx]);
 					}
 					if (pgm_read_byte(&anims[anim_idx + 13]) == 0)
 					{
