@@ -12,12 +12,12 @@
 //extern inline void LED0_ON();
 
 
-#define LINE0_PIN	1
-#define LINE1_PIN	2
-#define LINE2_PIN	3
-#define LINE3_PIN	4
-#define LINE4_PIN	5
-#define LINE5_PIN	6
+#define LINE0_PIN	6
+#define LINE1_PIN	5
+#define LINE2_PIN	4
+#define LINE3_PIN	3
+#define LINE4_PIN	2
+#define LINE5_PIN	1
 #define LINE6_PIN	7
 
 static inline void set_oldal_jobb()

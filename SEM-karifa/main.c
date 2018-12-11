@@ -32,7 +32,6 @@ const PROGMEM byte anims[] = {//120 = 1 sec
 	0, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 120/15,
 	0, 0, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 120/15,
 	0, 0, 0, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 120/15,
-
 	0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 1, /*ismétlés*/ 15, /*várakozás*/ 120/15,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, /*ismétlés*/ 15, /*várakozás*/ 120/15,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0, /*ismétlés*/ 15, /*várakozás*/ 120/15,
@@ -41,9 +40,12 @@ const PROGMEM byte anims[] = {//120 = 1 sec
 	0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 120/15,
 	0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 120/15,
 	1, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 120/15,
-	
-	15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 0, 1
 };
+
+byte anim_manual[15] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1};
+byte anim_manual_done = 0;
+byte anim_manual_enable = 0;
+byte anim_manual_cnt = 0;
 
 word anims_start_idx = 0;
 word anim_idx = 0xffff;
@@ -88,6 +90,11 @@ void init_main()
 	}
 	anim_now[13] = 1;
 	anim_now[14] = 1;
+	anim_manual[13] = 1;
+	anim_manual[14] = 1;
+	anim_manual_done = 0;
+	anim_manual_enable = 0;
+	
 	repeat_cnt = 0;
 	wait_cnt = 0;
 
@@ -139,7 +146,7 @@ int main(void)
 	
 	initAD();
 	PORTA = 0;
-	while(1)
+	while(0)
 	{
 		batteryMeasure();
 		_delay_ms(100);
@@ -175,10 +182,6 @@ int main(void)
 				button0_status.Clicked = 0;
 			}
 		}
-		/*if (!(PINB & 0x04))
-		{
-
-		}*/
 	}
 }
 
@@ -226,7 +229,7 @@ ISR(TIM0_OVF_vect)
 	}
 	TCNT0 = pwmshift;
 
-	for (byte i = idx_min; i <= idx_max; i++)
+	for (byte i = idx_min; i <= idx_max; i++) //106 órajelciklus
 	{
 		out |= (anim_out[i] & 0x1);
 		out <<= 1;
@@ -236,34 +239,60 @@ ISR(TIM0_OVF_vect)
 	
 	if (pwmcnt == 3 && oldal == BAL) //kövi lépésben új animáció kerül ki
 	{
-		//most lesz idõnk számolni
-		wait_cnt++;
-		if (wait_cnt == anim_now[14])
+		//most lesz idõnk számolni (1900 órajelciklus)
+		if (anim_manual_enable)
 		{
-			wait_cnt = 0;
-			repeat_cnt++;
-			if (repeat_cnt == anim_now[13])
+			if (anim_manual_done)
 			{
-				repeat_cnt = 0;
-				anim_idx += 15;
-				if (anim_idx >= pgm_read_byte(&anims_start[anims_start_idx + 1]))
-				{
-					anim_idx = 0;
-				}
-				if (pgm_read_byte(&anims[anim_idx + 13]) == 0)
+				if (anim_manual[13] == 0)
 				{
 					for (byte i = 0; i < 13; i++)
 					{
 						anim_now[i] = 0;
 					}
 				}
+				for (byte i = 0; i < 13; i++)
+				{
+					anim_now[i] += anim_manual[anim_idx + i];
+				}
+				anim_now[13] = anim_manual[13];
+				anim_now[14] = anim_manual[14];
+				if (anim_now[13] == 0) anim_now[13] = 1;
 			}
-			get_next_animation();
+			for (byte i = 0; i < 13; i++)
+			{
+				anim_out[i] = anim_now[i];
+			}
 		}
-		anim_out[0] = 0;
-		for (byte i = 0; i < 13; i++)
+		else
 		{
-			anim_out[i] = anim_now[i];
+			wait_cnt++;
+			if (wait_cnt == anim_now[14])
+			{
+				wait_cnt = 0;
+				repeat_cnt++;
+				if (repeat_cnt == anim_now[13])
+				{
+					repeat_cnt = 0;
+					anim_idx += 15;
+					if (anim_idx >= pgm_read_byte(&anims_start[anims_start_idx + 1]))
+					{
+						anim_idx = 0;
+					}
+					if (pgm_read_byte(&anims[anim_idx + 13]) == 0)
+					{
+						for (byte i = 0; i < 13; i++)
+						{
+							anim_now[i] = 0;
+						}
+					}
+				}
+				get_next_animation();
+			}
+			for (byte i = 0; i < 13; i++)
+			{
+				anim_out[i] = anim_now[i];
+			}
 		}
 	}
 

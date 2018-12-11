@@ -23,9 +23,9 @@
 void initAD()
 {	
 	
+	ADMUX = 0b00100001;  //[7:6]=select Vcc to ADref, [5:0] select ADchannel to Internal reference channel
 	ADCSRA = (1<<ADEN)|(1<<ADPS2)|(1<<ADPS1); //Enable ADC, Select 64 prescaller
 	ADCSRB = (1<<ADLAR); //left adjust result
-	ADMUX = 0b00100001;  //[7:6]=select Vcc to ADref, [5:0] select ADchannel to Internal reference channel
 	
 	_delay_ms(5);
 	//ide be kell tenni 1-2 msec késleltetést a referenca beállás miatt!!
