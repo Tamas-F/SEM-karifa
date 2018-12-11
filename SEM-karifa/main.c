@@ -21,25 +21,29 @@
 
 enum Oldal{BAL = 0, JOBB};
 
-#define ANIM_NUM	1
+#define ANIM_NUM	2
 #define ANIM_BYTES	15
-const PROGMEM byte anims_start[ANIM_NUM + 1] = {0, 14*ANIM_BYTES};
+const PROGMEM byte anims_start[ANIM_NUM + 1] = {0, 14*ANIM_BYTES, 16*ANIM_BYTES};
 
 const PROGMEM byte anims[] = {//120 = 1 sec
 	15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /*ismétlés*/ 0, /*várakozás*/ 1,
-	-1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 120/15,
-	0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 120/15,
-	0, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 120/15,
-	0, 0, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 120/15,
-	0, 0, 0, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 120/15,
-	0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 1, /*ismétlés*/ 15, /*várakozás*/ 120/15,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, /*ismétlés*/ 15, /*várakozás*/ 120/15,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0, /*ismétlés*/ 15, /*várakozás*/ 120/15,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 120/15,
-	0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 120/15,
-	0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 120/15,
-	0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 120/15,
-	1, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 120/15,
+	-1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 130/15,
+	0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 130/15,
+	0, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 130/15,
+	0, 0, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 130/15,
+	0, 0, 0, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 130/15,
+	0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 1, /*ismétlés*/ 15, /*várakozás*/ 130/15,
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, /*ismétlés*/ 15, /*várakozás*/ 130/15,
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0, /*ismétlés*/ 15, /*várakozás*/ 130/15,
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 130/15,
+	0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 130/15,
+	0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 130/15,
+	0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 130/15,
+	1, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 130/15,
+	//14
+	15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, /*ismétlés*/ 0, /*várakozás*/ 130,
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /*ismétlés*/ 0, /*várakozás*/ 130,
+	//14 + 2 = 16
 };
 
 byte anim_manual[15] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1};
@@ -47,8 +51,10 @@ byte anim_manual_done = 0;
 byte anim_manual_enable = 0;
 byte anim_manual_cnt = 0;
 
+byte mode = 0;
+
 word anims_start_idx = 0;
-word anim_idx = 0xffff;
+word anim_idx = 0xffff;  //a fix animációk közül melyik megy
 byte anim_now[15] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1};
 byte anim_out[13] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 byte repeat_cnt = 0;
@@ -77,9 +83,15 @@ void init_peripherals()
 	TCCR0B = 0x04; //256 prescaler
 	TCNT0 = 250; //Ezt csak random beállítjuk, hogy (majdnem) azonnal lejárjon
 	TIMSK0 = 0x01; //TOIE0: Timer/Counter0 Overflow Interrupt Enable
+	
+	TCCR1A = 0; //normalest normal mode
+	TCCR1B = 0b00000101; //1024 prescaler
+	TCNT1H = 0xFF;
+	TCNT1L = 0xFF;
+	TIMSK1 = 0b00000001;
 }
 
-void init_main()
+void init_anims()
 {
 	anims_start_idx = 0;
 	anim_idx = 0xfff0;
@@ -134,14 +146,71 @@ void goto_sleep()
 	PORTA=0x00;
 	disableINT0_IT();
 	init_peripherals();
-	init_main();
+	init_anims();
+	sei();
+}
+
+void anim1()
+{
+	byte done;
+	cli();
+	done = anim_manual_done; //itt ne csapjon be interrupt
+	sei();
+	if (!done)
+	{
+		if (anim_manual_cnt == 0)
+		{
+			anim_manual_cnt = 1;
+			for (byte i = 0; i < 13; i++)
+			{
+				anim_manual[i] = 15;
+			}
+			anim_manual[13] = 0;
+			anim_manual[14] = 130;
+		}
+		else
+		{
+			anim_manual_cnt = 0;
+			for (byte i = 0; i < 13; i++)
+			{
+				anim_manual[i] = 1;
+			}
+			anim_manual[13] = 0;
+			anim_manual[14] = 130;
+		}
+		cli();
+		anim_manual_done = 1;
+		sei();
+	}
+}
+
+void switch_mode(byte newmode)
+{
+	cli();
+	init_anims();
+	mode = newmode;
+	switch (newmode)
+	{
+		case 0:
+			anim_manual_enable = 0;
+			anims_start_idx = 0;
+		break;
+		case 1:
+			anim_manual_enable = 0;
+			anims_start_idx = 1;
+		break;
+		default:
+			mode = 0;
+		//printf("error");
+		break;
+	}
 	sei();
 }
 
 int main(void)
 {
 	init_peripherals();
-	init_main();
+	init_anims();
 	button0_init();
 	
 	initAD();
@@ -151,7 +220,8 @@ int main(void)
 		batteryMeasure();
 		_delay_ms(100);
 	}
-	
+	//anim_manual_enable = 1;
+	//anim1();
 	sei();
 	
 	/* Replace with your application code */
@@ -159,7 +229,7 @@ int main(void)
 	{
 		if (system_cnt == 0)
 		{
-			system_cnt = 39; //10 ms
+			system_cnt = 10; //10 ms
 			tmr_dec_byte(&button0_longTimer);
 			button0_proc();
 			//PORTA = PINB << 0;
@@ -180,8 +250,22 @@ int main(void)
 			if (button0_status.Clicked)
 			{
 				button0_status.Clicked = 0;
+				switch (mode)
+				{
+					case 0:
+					switch_mode(1);
+					break;
+					case 1:
+					switch_mode(0);
+					break;
+					default:
+						switch_mode(0);
+					break;
+				}
 			}
 		}
+		
+		//anim1();
 	}
 }
 
@@ -196,10 +280,15 @@ void get_next_animation()
 	if (anim_now[13] == 0) anim_now[13] = 1;
 }
 
+ISR(TIM1_OVF_vect)
+{
+	tmr_dec_byte(&system_cnt);
+	TCNT1H = 0xFF;
+	TCNT1L = 0xFF;	
+}
 
 ISR(TIM0_OVF_vect)
 {
-	tmr_dec_byte(&system_cnt);
 	
 	byte idx_min = 0;
 	byte idx_max = 5;
@@ -240,36 +329,33 @@ ISR(TIM0_OVF_vect)
 	if (pwmcnt == 3 && oldal == BAL) //kövi lépésben új animáció kerül ki
 	{
 		//most lesz idõnk számolni (1900 órajelciklus)
-		if (anim_manual_enable)
+		wait_cnt++;
+		if (wait_cnt == anim_now[14])
 		{
-			if (anim_manual_done)
+			wait_cnt = 0;
+			if (anim_manual_enable)
 			{
-				if (anim_manual[13] == 0)
+				if (anim_manual_done)
 				{
+					if (anim_manual[13] == 0)
+					{
+						for (byte i = 0; i < 13; i++)
+						{
+							anim_now[i] = 0;
+						}
+					}
 					for (byte i = 0; i < 13; i++)
 					{
-						anim_now[i] = 0;
+						anim_now[i] += anim_manual[i];
 					}
+					anim_now[13] = anim_manual[13];
+					anim_now[14] = anim_manual[14];
+					if (anim_now[13] == 0) anim_now[13] = 1;
+					anim_manual_done = 0;
 				}
-				for (byte i = 0; i < 13; i++)
-				{
-					anim_now[i] += anim_manual[anim_idx + i];
-				}
-				anim_now[13] = anim_manual[13];
-				anim_now[14] = anim_manual[14];
-				if (anim_now[13] == 0) anim_now[13] = 1;
 			}
-			for (byte i = 0; i < 13; i++)
+			else
 			{
-				anim_out[i] = anim_now[i];
-			}
-		}
-		else
-		{
-			wait_cnt++;
-			if (wait_cnt == anim_now[14])
-			{
-				wait_cnt = 0;
 				repeat_cnt++;
 				if (repeat_cnt == anim_now[13])
 				{
@@ -277,7 +363,7 @@ ISR(TIM0_OVF_vect)
 					anim_idx += 15;
 					if (anim_idx >= pgm_read_byte(&anims_start[anims_start_idx + 1]))
 					{
-						anim_idx = 0;
+						anim_idx = pgm_read_byte(&anims_start[anims_start_idx]);
 					}
 					if (pgm_read_byte(&anims[anim_idx + 13]) == 0)
 					{
@@ -289,10 +375,10 @@ ISR(TIM0_OVF_vect)
 				}
 				get_next_animation();
 			}
-			for (byte i = 0; i < 13; i++)
-			{
-				anim_out[i] = anim_now[i];
-			}
+		}
+		for (byte i = 0; i < 13; i++)
+		{
+			anim_out[i] = anim_now[i];
 		}
 	}
 
