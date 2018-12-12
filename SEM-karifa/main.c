@@ -132,25 +132,39 @@ void enableINT0_IT()
 {
 	bit_clr(&MCUCR, ISC00);
 	bit_clr(&MCUCR, ISC01);
-	bit_set(&GIMSK, INT0_BIT);
+	//bit_set(&GIMSK, INT0_BIT); Az INT0_BIT nem jó mert ez valami 2.bit és nekünk a 6. kell :D ez is ilyen random szar amire sose gondol az ember csak ha véletlen ránéz a implementre miközben pont ott meg van nyitva adatlap
+	bit_set(&GIMSK, INT0);
 }
 
 void goto_sleep()
 {
-	TIMSK0 = 0x00; //TOIE0: Timer/Counter0 Overflow Interrupt Enable
-	PRR = 0x0F;
-	PORTB &= ~0x03;
+	
+	TIMSK0 = 0x00; //TOIE0: Timer/Counter0 Overflow Interrupt Disable
+	
 	PORTA = 0x00;
-	set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+	while(!bit_get(&button0_PIN, button0_BIT));	//itt meg kell várni, hogy elengedjük a gombot a gombos cuccodat nem sikerült mûködésre bírnom, de te biztos vágod hogyan kell
+	_delay_ms(1);	//ez a bemenet "feltöltõdése"/stabilizálódása miatt kell
+	
+	PRR = 0x0F;		//Set the power save  
+	PORTB &= ~0x03;		//transistors off
+	PORTA = 0x00;		//all out off
+	enableINT0_IT();
+	set_sleep_mode(SLEEP_MODE_PWR_DOWN); 
+	
 	sleep_mode();
+	//az INT0 vektort a többi interrupt vekor fölé írtam
+		
 	cli();
 	DDRB=0x03;
 	PORTB=0x02 | 0x04;
 	DDRA=0xFF;
-	PORTA=0x00;
+	PORTA=0xF0;
+	while(1);	//eddig jó a felébresztés
 	disableINT0_IT();
 	init_peripherals();
 	init_anims();
+	
+	//valamiért az animációkat nem tudom mûködésre bíni ha felébred
 	sei();
 }
 
@@ -282,6 +296,10 @@ void get_next_animation()
 	anim_now[13] = pgm_read_byte(&anims[anim_idx + 13]);
 	anim_now[14] = pgm_read_byte(&anims[anim_idx + 14]);
 	if (anim_now[13] == 0) anim_now[13] = 1;
+}
+
+ISR(EXT_INT0_vect ){
+	cli();
 }
 
 ISR(TIM1_OVF_vect)
