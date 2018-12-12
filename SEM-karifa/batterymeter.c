@@ -13,11 +13,9 @@
 #include "util/delay.h"
 
 
-#define chargedVoltage 3.3
-#define dischargedVoltage 2.5
 
-#define fullValue 1.1*255/chargedVoltage	//ADin voltage * Resolution / +Rref 
-#define emptyValue 1.1*255/dischargedVoltage
+#define fullValue		85		//1.1*255/chargedVoltage
+#define dischargedADvalue	112	//1.1*255/dischargedVoltage
 #define dispRes 7
 
 void initAD()
@@ -40,33 +38,39 @@ void batteryMeasure()
 	bit_set(&ADCSRA, ADSC); //start AD conversion
 	_nop();
 	while(!bit_get(&ADCSRA, ADIF));	//wait for conversion ending
-	//calc charge% 
+
 	ADresult = ADCH;
-	batteryLevel = (ADresult-emptyValue) * dispRes / (fullValue-emptyValue); //calculate how many LED-s lighting
+	//ADresult = 84;	//Teszt
+	
+	if(ADresult > dischargedADvalue){	//Biztonsági rész ha túl alacsonya led akkor ne forduljon körbe
+		ADresult = dischargedADvalue;
+	}
+	//batteryLevel = (ADresult-(emptyValue)) * (dispRes / (fullValue-emptyValue)); //calculate how many LED-s lighting
+	batteryLevel = (112-ADresult)/4;	// 27/7 ~= 4
 	
 	//create display data
 	set_oldal_bal();
-	PORTA = ADresult;
-	//PORTA = 0;
-	//if(batteryLevel >= 1){
-		//bit_set(&PORTA, LINE0_PIN);
-	//}
-	//if(batteryLevel >= 2){
-		//bit_set(&PORTA, LINE1_PIN);
-	//}
-	//if(batteryLevel >= 3){
-		//bit_set(&PORTA, LINE2_PIN);
-	//}
-	//if(batteryLevel >= 4){
-		//bit_set(&PORTA, LINE3_PIN);
-	//}
-	//if(batteryLevel >= 5){
-		//bit_set(&PORTA, LINE4_PIN);
-	//}
-	//if(batteryLevel >= 6){
-		//bit_set(&PORTA, LINE5_PIN);
-	//}
-	//if(batteryLevel >= 7){
-		//bit_set(&PORTA, LINE6_PIN);
-	//}
+
+	PORTA = 0;
+	if(batteryLevel >= 1){
+		bit_set(&PORTA, LINE0_PIN);
+	}
+	if(batteryLevel >= 2){
+		bit_set(&PORTA, LINE1_PIN);
+	}
+	if(batteryLevel >= 3){
+		bit_set(&PORTA, LINE2_PIN);
+	}
+	if(batteryLevel >= 4){
+		bit_set(&PORTA, LINE3_PIN);
+	}
+	if(batteryLevel >= 5){
+		bit_set(&PORTA, LINE4_PIN);
+	}
+	if(batteryLevel >= 6){
+		bit_set(&PORTA, LINE5_PIN);
+	}
+	if(batteryLevel >= 7){
+		bit_set(&PORTA, LINE6_PIN);
+	}
 }
