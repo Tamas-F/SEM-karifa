@@ -9,56 +9,88 @@
 #include <avr/io.h>
 #include <util/delay.h>
 #include <avr/sleep.h>
-#include <avr/power.h>
 #include <avr/interrupt.h>
 #include <avr/pgmspace.h>
-#include <util/delay_basic.h>
 #include "commons.h"
 #include "leds.h"
 #include "buttons.h"
 #include "batterymeter.h"
-#define ido	100
 
 enum Oldal{BAL = 0, JOBB};
 
-#define ANIM_NUM	3
+#define ANIM_NUM	5
 #define ANIM_BYTES	15
-const PROGMEM word anims_start[ANIM_NUM + 1] = {0, 14*ANIM_BYTES, 16*ANIM_BYTES, 19*ANIM_BYTES};
+
+const PROGMEM word anims_start[ANIM_NUM + 1] = {0, 8*ANIM_BYTES, 22*ANIM_BYTES, 24*ANIM_BYTES, 27*ANIM_BYTES, 41*ANIM_BYTES};
 
 const PROGMEM byte anims[] = {//120 = 1 sec
+	
+	//0 => 0 --- Classic
+	15,	0,	15,	0,	0,	15,	15,	0,	0,	15,	0,	15,	15,	0,	16,
+	0,	15,	0,	15,	15,	0,	0,	15,	15,	0,	15,	0,	0,	0,	16,
+	15,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	15,	0,	0,	16,
+	0,	15,	0,	15,	15,	0,	0,	15,	15,	0,	15,	0,	0,	0,	16,
+	15,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	15,	0,	0,	16,
+	0,	0,	0,	15,	0,	0,	0,	0,	15,	0,	0,	0,	0,	0,	16,
+	15,	0,	15,	0,	0,	15,	15,	0,	15,	0,	0,	15,	15,	0,	16,
+	0,	0,	0,	15,	0,	0,	0,	0,	15,	0,	0,	0,	0,	0,	16,
+
+	//8 => 8 ---
+	//Fade circle
 	15,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	/*ismétlés*/	0,	/*várakozás*/	1,
-	-1,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	/*ismétlés*/	15,	/*várakozás*/	130/15,
-	0,	-1,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	/*ismétlés*/	15,	/*várakozás*/	130/15,
-	0,	0,	-1,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	/*ismétlés*/	15,	/*várakozás*/	130/15,
-	0,	0,	0,	-1,	1,	0,	0,	0,	0,	0,	0,	0,	0,	/*ismétlés*/	15,	/*várakozás*/	130/15,
-	0,	0,	0,	0,	-1,	1,	0,	0,	0,	0,	0,	0,	0,	/*ismétlés*/	15,	/*várakozás*/	130/15,
-	0,	0,	0,	0,	0,	-1,	0,	0,	0,	0,	0,	0,	1,	/*ismétlés*/	15,	/*várakozás*/	130/15,
-	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	-1,	/*ismétlés*/	15,	/*várakozás*/	130/15,
-	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	-1,	0,	/*ismétlés*/	15,	/*várakozás*/	130/15,
-	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	-1,	0,	0,	/*ismétlés*/	15,	/*várakozás*/	130/15,
-	0,	0,	0,	0,	0,	0,	0,	0,	1,	-1,	0,	0,	0,	/*ismétlés*/	15,	/*várakozás*/	130/15,
-	0,	0,	0,	0,	0,	0,	0,	1,	-1,	0,	0,	0,	0,	/*ismétlés*/	15,	/*várakozás*/	130/15,
-	0,	0,	0,	0,	0,	0,	1,	-1,	0,	0,	0,	0,	0,	/*ismétlés*/	15,	/*várakozás*/	130/15,
-	1,	0,	0,	0,	0,	0,	-1,	0,	0,	0,	0,	0,	0,	/*ismétlés*/	15,	/*várakozás*/	130/15,
-	//14 => 14
+	-1,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	/*ismétlés*/	15,	/*várakozás*/	130/30,
+	0,	-1,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	/*ismétlés*/	15,	/*várakozás*/	130/30,
+	0,	0,	-1,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	/*ismétlés*/	15,	/*várakozás*/	130/30,
+	0,	0,	0,	-1,	1,	0,	0,	0,	0,	0,	0,	0,	0,	/*ismétlés*/	15,	/*várakozás*/	130/30,
+	0,	0,	0,	0,	-1,	1,	0,	0,	0,	0,	0,	0,	0,	/*ismétlés*/	15,	/*várakozás*/	130/30,
+	0,	0,	0,	0,	0,	-1,	0,	0,	0,	0,	0,	0,	1,	/*ismétlés*/	15,	/*várakozás*/	130/30,
+	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	-1,	/*ismétlés*/	15,	/*várakozás*/	130/30,
+	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	-1,	0,	/*ismétlés*/	15,	/*várakozás*/	130/30,
+	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	-1,	0,	0,	/*ismétlés*/	15,	/*várakozás*/	130/30,
+	0,	0,	0,	0,	0,	0,	0,	0,	1,	-1,	0,	0,	0,	/*ismétlés*/	15,	/*várakozás*/	130/30,
+	0,	0,	0,	0,	0,	0,	0,	1,	-1,	0,	0,	0,	0,	/*ismétlés*/	15,	/*várakozás*/	130/30,
+	0,	0,	0,	0,	0,	0,	1,	-1,	0,	0,	0,	0,	0,	/*ismétlés*/	15,	/*várakozás*/	130/30,
+	1,	0,	0,	0,	0,	0,	-1,	0,	0,	0,	0,	0,	0,	/*ismétlés*/	15,	/*várakozás*/	130/30,
+	//14 => 22
+	//fel, le villog
 	15,	15,	15,	15,	15,	15,	15,	15,	15,	15,	15,	15,	15,	/*ismétlés*/	0,	/*várakozás*/	130,
 	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	/*ismétlés*/	0,	/*várakozás*/	130,
-	//2 => 16
+	
+	//2 => 24 ---
+	//fel, le fade-el
 	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	/*ismétlés*/	0,	/*várakozás*/	1,
 	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	/*ismétlés*/	15,	/*várakozás*/	130/8,
 	-1,	-1,	-1,	-1,	-1,	-1,	-1,	-1,	-1,	-1,	-1,	-1,	-1,	/*ismétlés*/	15,	/*várakozás*/	130/8,
-	//3 => 19
+	
+	//3 => 27 ---
+	//pseudorandomfade
+	0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0,  /*ismétlés*/ 15, /*várakozás*/ 8, /*7*/
+	0, 0, 1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 8, /*2*/
+	0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 8, /*10*/
+	1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 8, /*0*/
+	-1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 8, /*5*/
+	0, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 8, /*8*/
+	0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 1, 0, /*ismétlés*/ 15, /*várakozás*/ 8, /*11*/
+	0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, /*ismétlés*/ 15, /*várakozás*/ 8, /*1*/
+	0, -1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 8, /*3*/
+	0, 0, 0, -1, 0, 0, 1, 0, 0, 0, 0, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 8, /*6*/
+	0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 1, /*ismétlés*/ 15, /*várakozás*/ 8, /*12*/
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, -1, /*ismétlés*/ 15, /*várakozás*/ 8, /*9*/
+	0, 0, 0, 0, 1, 0, 0, 0, 0, -1, 0, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 8, /*4*/
+	0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 8, /*reset*/
+	//17 => 41
+
 };
 
-byte anim_manual[15] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1};
-byte anim_manual_done = 0;
-byte anim_manual_enable = 0;
+volatile byte anim_manual[15] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1};
+volatile byte anim_manual_done = 0;
+volatile byte anim_manual_enable = 0;
 byte anim_manual_cnt = 0;
 
 byte mode = 0;
 
-word anims_start_idx = 0;
-word anim_idx = 0xffff;  //a fix animációk közül melyik megy
+volatile word anims_start_idx = 0;
+volatile word anim_idx = 0xffff;  //a fix animációk közül melyik megy
 byte anim_now[15] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1};
 byte anim_out[13] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 byte repeat_cnt = 0;
@@ -72,6 +104,28 @@ byte pwmshift = 0xFF;
 
 volatile byte system_cnt = 0;
 
+void show_battery();
+void switch_mode(byte newmode);
+
+void init_timer0()
+{
+	TCCR0A = 0; //normalest normal mode
+	TCCR0B = 0x04; //256 prescaler
+	TCNT0 = 250; //Ezt csak random beállítjuk, hogy (majdnem) azonnal lejárjon
+	TIMSK0 = 0x01; //TOIE0: Timer/Counter0 Overflow Interrupt Enable
+	bit_clr(&PRR, PRTIM0);
+}
+
+void init_timer1()
+{
+	TCCR1A = 0; //normalest normal mode
+	TCCR1B = 0b00000101; //1024 prescaler
+	TCNT1H = 0xFF;
+	TCNT1L = 0xFF;
+	TIMSK1 = 0b00000001;
+	bit_clr(&PRR, PRTIM1);
+}
+
 void init_peripherals()
 {
 	DDRB=0x03;
@@ -81,22 +135,15 @@ void init_peripherals()
 	//ACSR=0x80; //disable adc
 	//DIDR0 = 0x06;
 	//ADCSRA=0x00;
-	//PRR = 0x0B;
-
-	TCCR0A = 0; //normalest normal mode
-	TCCR0B = 0x04; //256 prescaler
-	TCNT0 = 250; //Ezt csak random beállítjuk, hogy (majdnem) azonnal lejárjon
-	TIMSK0 = 0x01; //TOIE0: Timer/Counter0 Overflow Interrupt Enable
+	PRR = 0x00;
 	
-	TCCR1A = 0; //normalest normal mode
-	TCCR1B = 0b00000101; //1024 prescaler
-	TCNT1H = 0xFF;
-	TCNT1L = 0xFF;
-	TIMSK1 = 0b00000001;
+	init_timer0();
+	init_timer1();
 }
 
 void init_anims()
 {
+	mode = 0;
 	anims_start_idx = 0;
 	anim_idx = 0xfff0;
 	for (int i = 0; i < 13; i++)
@@ -125,47 +172,64 @@ void init_anims()
 
 void disableINT0_IT()
 {
-	bit_clr(&GIMSK, INT0_BIT);
+	bit_clr(&GIMSK, INT0);
 }
 
 void enableINT0_IT()
 {
 	bit_clr(&MCUCR, ISC00);
 	bit_clr(&MCUCR, ISC01);
-	//bit_set(&GIMSK, INT0_BIT); Az INT0_BIT nem jó mert ez valami 2.bit és nekünk a 6. kell :D ez is ilyen random szar amire sose gondol az ember csak ha véletlen ránéz a implementre miközben pont ott meg van nyitva adatlap
 	bit_set(&GIMSK, INT0);
 }
 
 void goto_sleep()
 {
-	
 	TIMSK0 = 0x00; //TOIE0: Timer/Counter0 Overflow Interrupt Disable
-	
 	PORTA = 0x00;
-	while(!bit_get(&button0_PIN, button0_BIT));	//itt meg kell várni, hogy elengedjük a gombot a gombos cuccodat nem sikerült mûködésre bírnom, de te biztos vágod hogyan kell
+
+	while (!button0_status.Released)
+	{
+		button0_proc();
+	}
+	button0_status.Released = 0;
+//	while(!bit_get(&button0_PIN, button0_BIT));	//itt meg kell várni, hogy elengedjük a gombot a gombos cuccodat nem sikerült mûködésre bírnom, de te biztos vágod hogyan kell
 	_delay_ms(1);	//ez a bemenet "feltöltõdése"/stabilizálódása miatt kell
+
+
+	button0_init();
+	byte exitSleep = 0;
+	while (!exitSleep)
+	{
+		PRR = 0x0F;		//Set the power save
+		PORTB &= ~0x03;		//transistors off
+		PORTA = 0;
+		enableINT0_IT();
+		set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+		sleep_mode();
+		disableINT0_IT();
+		button0_proc();
+		if (button0_status.Pressed)
+		{
+			button0_status.Pressed = 0;
+			exitSleep = 1;
+		}
+		_delay_ms(10);
+	}
+	while(!button0_status.Released)
+	{
+		button0_proc();
+		_delay_ms(10);
+	}
 	
-	PRR = 0x0F;		//Set the power save  
-	PORTB &= ~0x03;		//transistors off
-	PORTA = 0x00;		//all out off
-	enableINT0_IT();
-	set_sleep_mode(SLEEP_MODE_PWR_DOWN); 
-	
-	sleep_mode();
-	//az INT0 vektort a többi interrupt vekor fölé írtam
-		
 	cli();
-	DDRB=0x03;
-	PORTB=0x02 | 0x04;
-	DDRA=0xFF;
-	PORTA=0xF0;
-	while(1);	//eddig jó a felébresztés
-	disableINT0_IT();
-	init_peripherals();
 	init_anims();
-	
-	//valamiért az animációkat nem tudom mûködésre bíni ha felébred
+	switch_mode(0xFF);
+	init_peripherals();
+	button0_init();
 	sei();
+	PRR = 0;
+	show_battery();
+	init_anims();
 }
 
 void anim1()
@@ -202,45 +266,108 @@ void anim1()
 	}
 }
 
+void show_battery()
+{
+	initAD();
+	PORTA = 0x0;
+	byte battery = 0;
+	for (byte i = 0; i < 1; i++)
+	{
+		battery += batteryMeasure();
+		_delay_ms(1);
+	}
+	battery >>= 0;
+	disableAD();
+
+	anim_manual_enable = 1;
+	if (battery >= 7) battery = 7;
+	sei();
+	while(anim_manual_done);
+	
+	anim_manual[13] = 0;
+	anim_manual[14] = 13;
+	for (byte i = 0; i < 7; i++)
+	{
+		for (byte j = 0; j <= min(i, 5); j++)
+		{
+			anim_manual[j] = 15;
+			anim_manual[j+6] = 15;
+		}
+		if (i == 6) anim_manual[12] = 15;
+		anim_manual_done = 1;
+		while(anim_manual_done);
+	}
+	
+	anim_manual[13] = 0;
+	anim_manual[14] = 13;
+	for (byte i = 7; i != battery; i--)
+	{
+		for (byte j = 0; j < 6; j++)
+		{
+			anim_manual[j] = 0;
+			anim_manual[j+6] = 0;
+			if (j < i-1)
+			{
+				anim_manual[j] = 15;
+				anim_manual[j+6] = 15;
+			}
+		}
+		anim_manual[12] = 0;
+		//if (i == 6) anim_manual[12] = 15;
+		anim_manual_done = 1;
+		while(anim_manual_done);
+	}
+	for (byte i = 0; i < 3; i++)
+	{
+		anim_manual[14] = 130;
+		anim_manual_done = 1;
+		while(anim_manual_done);
+	}
+}
+
 void switch_mode(byte newmode)
 {
 	cli();
 	init_anims();
 	mode = newmode;
-	switch (newmode)
+	if (newmode < ANIM_NUM)
 	{
-		case 0:
-		case 1:
-		case 2:
-			anim_manual_enable = 0;
-			anims_start_idx = newmode;
-		break;
-		default:
-			mode = 0;
-		//printf("error");
-		break;
+		anim_manual_enable = 0;
+		anims_start_idx = newmode;
+	}
+	else if (newmode == 0xFF)
+	{
+		anim_manual_enable = 1;
+		for (byte i = 0; i < 13; i++)
+		{
+			anim_manual[i] = 0;
+		}
+		anim_manual[13] = 0;
+		anim_manual[14] = 1;
+	}
+	else
+	{
+		anim_manual_enable = 0;
+		anims_start_idx = newmode;
+		mode = 0;
 	}
 	sei();
 }
 
 int main(void)
 {
+	initAD();
 	init_peripherals();
 	init_anims();
 	button0_init();
-	
-	initAD();
-	PORTA = 0;
-	while(0)
-	{
-		batteryMeasure();
-		_delay_ms(100);
-	}
+	//switch_mode(0xFF);
 	//anim_manual_enable = 1;
 	//anim1();
+	switch_mode(0xFF);
+	show_battery();
+	init_anims();
+//	switch_mode(0);
 	sei();
-	
-	/* Replace with your application code */
 	while (1)
 	{
 		if (system_cnt == 0)
@@ -266,20 +393,31 @@ int main(void)
 			if (button0_status.Clicked)
 			{
 				button0_status.Clicked = 0;
-				switch (mode)
+				if (mode < ANIM_NUM)
 				{
-					case 0:
-					case 1:
-					case 2:
-						if (mode == 2)
+						if (mode == ANIM_NUM - 1)
 							switch_mode(0);
 						else
 							switch_mode(mode + 1);
-					break;
-					default:
-						switch_mode(0);
-					break;
 				}
+				else
+				{
+					switch_mode(0);
+				}
+				//switch (mode)
+				//{
+					//case 0:
+					//case 1:
+					//case 2:
+						//if (mode == 2)
+							//switch_mode(0);
+						//else
+							//switch_mode(mode + 1);
+					//break;
+					//default:
+						//switch_mode(0);
+					//break;
+				//}
 			}
 		}
 		

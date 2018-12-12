@@ -68,4 +68,10 @@ static inline void tmr_dec_word(volatile word *tmr)
 	}
 }
 
+static inline byte min(byte a, byte b)
+{
+	if(a > b) return b;
+	return a;
+}
+
 #endif /* COMMONS_H_ */

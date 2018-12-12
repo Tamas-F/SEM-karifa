@@ -35,7 +35,7 @@ extern byte button0_longTimer;		//10ms
 extern button_status button0_status;
 
 #define INIT_BUTTON0_PRELL	2		//x10ms
-#define INIT_BUTTON0_LONG1	70		//x10ms
+#define INIT_BUTTON0_LONG1	100		//x10ms
 #define INIT_BUTTON0_LONG2	30		//x10ms
 
 #endif /* BUTTONS_H_ */

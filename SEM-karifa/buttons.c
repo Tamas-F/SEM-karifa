@@ -63,7 +63,7 @@ void button0_proc()
 		}
 		else if (!button0_longTimer)
 		{
-			button0_longTimer = INIT_BUTTON0_LONG2;
+			//button0_longTimer = INIT_BUTTON0_LONG2;
 			button0_status.CanClick = 0;
 			button0_status.LongPress = 1;
 		}

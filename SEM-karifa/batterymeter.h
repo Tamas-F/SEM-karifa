@@ -9,8 +9,9 @@
 #ifndef BATTERYMETER_H_
 #define BATTERYMETER_H_
 
-void batteryMeasure();
+byte batteryMeasure();
 void initAD();
+void disableAD();
 
 
 
