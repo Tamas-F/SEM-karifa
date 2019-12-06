@@ -10,41 +10,29 @@
  #include <avr/pgmspace.h>
  #include "commons.h"
  
- // Ki számolja az anims start tömb-be, hogy mi lesz az animáció kezdõ címe
- #define SIZE_ANIM_0	8		// 0. animáció hossza (sor)
- #define SIZE_ANIM_1	14		// 1. animáció hossza (sor)
- #define SIZE_ANIM_2	3		// 2. animáció hossza (sor)
- #define SIZE_ANIM_3	9		// 3. animáció hossza (sor)
- #define SIZE_ANIM_4	2		// 4. animáció hossza (sor)
- #define SIZE_ANIM_5	3		// 5. animáció hossza (sor)
- #define SIZE_ANIM_6	14		// 6. animáció hossza (sor)
- #define SIZE_ANIM_7	20		// 7. animáció hossza (sor)
- #define SIZE_ANIM_8	18		// 8. animáció hossza (sor)
- #define SIZE_ANIM_9	0		// 9. animáció hossza (sor)
-/*
- #define ANIM_0_START	0											// 0.animáció kezdõcíme
- #define ANIM_1_START	(ANIM_0_START + SIZE_ANIM_0) * ANIM_BYTES		// 1.animáció kezdõcíme
- #define ANIM_2_START	(ANIM_1_START + SIZE_ANIM_1) * ANIM_BYTES		// 2.animáció kezdõcíme
- #define ANIM_3_START	(ANIM_2_START + SIZE_ANIM_2) * ANIM_BYTES		// 3.animáció kezdõcíme
- #define ANIM_4_START	(ANIM_3_START + SIZE_ANIM_3) * ANIM_BYTES		// 4.animáció kezdõcíme
- #define ANIM_5_START	(ANIM_4_START + SIZE_ANIM_4) * ANIM_BYTES		// 5.animáció kezdõcíme
- #define ANIM_6_START	(ANIM_5_START + SIZE_ANIM_5) * ANIM_BYTES		// 6.animáció kezdõcíme
- #define ANIM_7_START	(ANIM_6_START + SIZE_ANIM_6) * ANIM_BYTES		// 7.animáció kezdõcíme
- #define ANIM_8_START	(ANIM_7_START + SIZE_ANIM_7) * ANIM_BYTES		// 8.animáció kezdõcíme
- #define ANIM_9_START	(ANIM_8_START + SIZE_ANIM_8) * ANIM_BYTES		// 9.animáció kezdõcíme
- #define ANIM_END		(ANIM_9_START + SIZE_ANIM_9) * ANIM_BYTES		// animációk vége
- */
- #define ANIM_0_START	0												// 0.animáció kezdõcíme
- #define ANIM_1_START	ANIM_0_START + (SIZE_ANIM_0 * ANIM_BYTES)		// 1.animáció kezdõcíme
- #define ANIM_2_START	ANIM_1_START + (SIZE_ANIM_1 * ANIM_BYTES)		// 2.animáció kezdõcíme
- #define ANIM_3_START	ANIM_2_START + (SIZE_ANIM_2 * ANIM_BYTES)		// 3.animáció kezdõcíme
- #define ANIM_4_START	ANIM_3_START + (SIZE_ANIM_3 * ANIM_BYTES)		// 4.animáció kezdõcíme
- #define ANIM_5_START	ANIM_4_START + (SIZE_ANIM_4 * ANIM_BYTES)		// 5.animáció kezdõcíme
- #define ANIM_6_START	ANIM_5_START + (SIZE_ANIM_5 * ANIM_BYTES)		// 6.animáció kezdõcíme
- #define ANIM_7_START	ANIM_6_START + (SIZE_ANIM_6 * ANIM_BYTES)		// 7.animáció kezdõcíme
- #define ANIM_8_START	ANIM_7_START + (SIZE_ANIM_7 * ANIM_BYTES)		// 8.animáció kezdõcíme
- #define ANIM_9_START	ANIM_8_START + (SIZE_ANIM_8 * ANIM_BYTES)		// 9.animáció kezdõcíme
- #define ANIM_END		ANIM_6_START + (SIZE_ANIM_7 * ANIM_BYTES)		// Animációk vége cím
+ // Ki szamolja az anims start tomb-be, hogy mi lesz az animacio kezdo cime
+ #define SIZE_ANIM_0	8		// 0. animacio hossza (sor)
+ #define SIZE_ANIM_1	14		// 1. animacio hossza (sor)
+ #define SIZE_ANIM_2	3		// 2. animacio hossza (sor)
+ #define SIZE_ANIM_3	9		// 3. animacio hossza (sor)
+ #define SIZE_ANIM_4	2		// 4. animacio hossza (sor)
+ #define SIZE_ANIM_5	3		// 5. animacio hossza (sor)
+ #define SIZE_ANIM_6	14		// 6. animacio hossza (sor)
+ #define SIZE_ANIM_7	20		// 7. animacio hossza (sor)
+ #define SIZE_ANIM_8	18		// 8. animacio hossza (sor)
+ #define SIZE_ANIM_9	0		// 9. animacio hossza (sor)
+
+ #define ANIM_0_START	0												// 0.animacio kezdocime
+ #define ANIM_1_START	ANIM_0_START + (SIZE_ANIM_0 * ANIM_BYTES)		// 1.animacio kezdocime
+ #define ANIM_2_START	ANIM_1_START + (SIZE_ANIM_1 * ANIM_BYTES)		// 2.animacio kezdocime
+ #define ANIM_3_START	ANIM_2_START + (SIZE_ANIM_2 * ANIM_BYTES)		// 3.animacio kezdocime
+ #define ANIM_4_START	ANIM_3_START + (SIZE_ANIM_3 * ANIM_BYTES)		// 4.animacio kezdocime
+ #define ANIM_5_START	ANIM_4_START + (SIZE_ANIM_4 * ANIM_BYTES)		// 5.animacio kezdocime
+ #define ANIM_6_START	ANIM_5_START + (SIZE_ANIM_5 * ANIM_BYTES)		// 6.animacio kezdocime
+ #define ANIM_7_START	ANIM_6_START + (SIZE_ANIM_6 * ANIM_BYTES)		// 7.animacio kezdocime
+ #define ANIM_8_START	ANIM_7_START + (SIZE_ANIM_7 * ANIM_BYTES)		// 8.animacio kezdocime
+ #define ANIM_9_START	ANIM_8_START + (SIZE_ANIM_8 * ANIM_BYTES)		// 9.animacio kezdocime
+ #define ANIM_END		ANIM_6_START + (SIZE_ANIM_7 * ANIM_BYTES)		// Animaciok vege cim
  
 
  const PROGMEM word anims_start[ANIM_NUM + 1] = {ANIM_0_START, ANIM_1_START, ANIM_2_START, ANIM_3_START, ANIM_4_START, ANIM_5_START, ANIM_6_START, ANIM_7_START, ANIM_8_START, ANIM_9_START, ANIM_END};
