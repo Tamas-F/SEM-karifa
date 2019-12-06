@@ -15,11 +15,13 @@
 #include "leds.h"
 #include "buttons.h"
 #include "batterymeter.h"
+#include "anims.h"
 
 enum Oldal{BAL = 0, JOBB};
 
 #define ANIM_NUM	7
 #define ANIM_BYTES	15
+#define AUTO_TURNOFF_TIME		3600*4		//sec
 
 const PROGMEM word anims_start[ANIM_NUM + 1] = {0, 8*ANIM_BYTES, 22*ANIM_BYTES, 24*ANIM_BYTES, 27*ANIM_BYTES, 41*ANIM_BYTES, 61*ANIM_BYTES, 79*ANIM_BYTES};
 
@@ -144,6 +146,8 @@ byte pwmcnt = 4;
 byte pwmshift = 0xFF;
 
 volatile byte system_cnt = 0;
+volatile byte sec_cnt = 0;
+volatile word turnoff_cnt = AUTO_TURNOFF_TIME;
 
 void show_battery();
 void switch_mode(byte newmode);
@@ -209,6 +213,9 @@ void init_anims()
 	pwmshift = 0xFF;
 	
 	system_cnt = 0;
+	
+	sec_cnt = 0;	
+	turnoff_cnt = AUTO_TURNOFF_TIME;
 }
 
 void disableINT0_IT()
@@ -405,7 +412,9 @@ int main(void)
 	//anim_manual_enable = 1;
 	//anim1();
 	switch_mode(0xFF);
+	
 	show_battery();
+	
 	init_anims();
 //	switch_mode(0);
 	sei();
@@ -414,9 +423,25 @@ int main(void)
 		if (system_cnt == 0)
 		{
 			system_cnt = 10; //10 ms
+			
 			tmr_dec_byte(&button0_longTimer);
 			button0_proc();
 			//PORTA = PINB << 0;
+			tmr_dec_byte(&sec_cnt);
+			if (sec_cnt == 0)
+			{
+				sec_cnt = 100;
+				tmr_dec_word(&turnoff_cnt);
+				if (turnoff_cnt == 0)
+				{
+					turnoff_cnt = AUTO_TURNOFF_TIME;
+					button0_status.Released = 1;
+					goto_sleep();
+					continue;
+				}
+			}
+
+
 			if (button0_status.Pressed)
 			{
 				button0_status.Pressed = 0;
@@ -428,6 +453,7 @@ int main(void)
 			if (button0_status.LongPress)
 			{
 				button0_status.LongPress = 0;
+
 				goto_sleep();
 				continue;
 			}
