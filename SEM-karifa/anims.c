@@ -6,50 +6,114 @@
  */ 
 
  #include "anims.h"
+ #include <avr/io.h>
+ #include <avr/pgmspace.h>
+ #include "commons.h"
+ 
+ // Ki számolja az anims start tömb-be, hogy mi lesz az animáció kezdõ címe
+ #define SIZE_ANIM_0	8		// 0. animáció hossza (sor)
+ #define SIZE_ANIM_1	14		// 1. animáció hossza (sor)
+ #define SIZE_ANIM_2	3		// 2. animáció hossza (sor)
+ #define SIZE_ANIM_3	9		// 3. animáció hossza (sor)
+ #define SIZE_ANIM_4	2		// 4. animáció hossza (sor)
+ #define SIZE_ANIM_5	3		// 5. animáció hossza (sor)
+ #define SIZE_ANIM_6	14		// 6. animáció hossza (sor)
+ #define SIZE_ANIM_7	20		// 7. animáció hossza (sor)
+ #define SIZE_ANIM_8	18		// 8. animáció hossza (sor)
+ #define SIZE_ANIM_9	0		// 9. animáció hossza (sor)
+/*
+ #define ANIM_0_START	0											// 0.animáció kezdõcíme
+ #define ANIM_1_START	(ANIM_0_START + SIZE_ANIM_0) * ANIM_BYTES		// 1.animáció kezdõcíme
+ #define ANIM_2_START	(ANIM_1_START + SIZE_ANIM_1) * ANIM_BYTES		// 2.animáció kezdõcíme
+ #define ANIM_3_START	(ANIM_2_START + SIZE_ANIM_2) * ANIM_BYTES		// 3.animáció kezdõcíme
+ #define ANIM_4_START	(ANIM_3_START + SIZE_ANIM_3) * ANIM_BYTES		// 4.animáció kezdõcíme
+ #define ANIM_5_START	(ANIM_4_START + SIZE_ANIM_4) * ANIM_BYTES		// 5.animáció kezdõcíme
+ #define ANIM_6_START	(ANIM_5_START + SIZE_ANIM_5) * ANIM_BYTES		// 6.animáció kezdõcíme
+ #define ANIM_7_START	(ANIM_6_START + SIZE_ANIM_6) * ANIM_BYTES		// 7.animáció kezdõcíme
+ #define ANIM_8_START	(ANIM_7_START + SIZE_ANIM_7) * ANIM_BYTES		// 8.animáció kezdõcíme
+ #define ANIM_9_START	(ANIM_8_START + SIZE_ANIM_8) * ANIM_BYTES		// 9.animáció kezdõcíme
+ #define ANIM_END		(ANIM_9_START + SIZE_ANIM_9) * ANIM_BYTES		// animációk vége
+ */
+ #define ANIM_0_START	0												// 0.animáció kezdõcíme
+ #define ANIM_1_START	ANIM_0_START + (SIZE_ANIM_0 * ANIM_BYTES)		// 1.animáció kezdõcíme
+ #define ANIM_2_START	ANIM_1_START + (SIZE_ANIM_1 * ANIM_BYTES)		// 2.animáció kezdõcíme
+ #define ANIM_3_START	ANIM_2_START + (SIZE_ANIM_2 * ANIM_BYTES)		// 3.animáció kezdõcíme
+ #define ANIM_4_START	ANIM_3_START + (SIZE_ANIM_3 * ANIM_BYTES)		// 4.animáció kezdõcíme
+ #define ANIM_5_START	ANIM_4_START + (SIZE_ANIM_4 * ANIM_BYTES)		// 5.animáció kezdõcíme
+ #define ANIM_6_START	ANIM_5_START + (SIZE_ANIM_5 * ANIM_BYTES)		// 6.animáció kezdõcíme
+ #define ANIM_7_START	ANIM_6_START + (SIZE_ANIM_6 * ANIM_BYTES)		// 7.animáció kezdõcíme
+ #define ANIM_8_START	ANIM_7_START + (SIZE_ANIM_7 * ANIM_BYTES)		// 8.animáció kezdõcíme
+ #define ANIM_9_START	ANIM_8_START + (SIZE_ANIM_8 * ANIM_BYTES)		// 9.animáció kezdõcíme
+ #define ANIM_END		ANIM_6_START + (SIZE_ANIM_7 * ANIM_BYTES)		// Animációk vége cím
+ 
 
- const PROGMEM word anims_start[ANIM_NUM + 1] = {0, 8*ANIM_BYTES, 22*ANIM_BYTES, 24*ANIM_BYTES, 27*ANIM_BYTES, 41*ANIM_BYTES, 61*ANIM_BYTES, 79*ANIM_BYTES};
+ const PROGMEM word anims_start[ANIM_NUM + 1] = {ANIM_0_START, ANIM_1_START, ANIM_2_START, ANIM_3_START, ANIM_4_START, ANIM_5_START, ANIM_6_START, ANIM_7_START, ANIM_8_START, ANIM_9_START, ANIM_END};
 
  const PROGMEM byte anims[] = {//120 = 1 sec
 	 
-	 //0 => 0 --- Classic
-	 15,	0,	15,	0,	0,	15,	15,	0,	0,	15,	0,	15,	15,	0,	16,
-	 0,	15,	0,	15,	15,	0,	0,	15,	15,	0,	15,	0,	0,	0,	16,
-	 15,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	15,	0,	0,	16,
-	 0,	15,	0,	15,	15,	0,	0,	15,	15,	0,	15,	0,	0,	0,	16,
-	 15,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	15,	0,	0,	16,
-	 0,	0,	0,	15,	0,	0,	0,	0,	15,	0,	0,	0,	0,	0,	16,
-	 15,	0,	15,	0,	0,	15,	15,	0,	15,	0,	0,	15,	15,	0,	16,
-	 0,	0,	0,	15,	0,	0,	0,	0,	15,	0,	0,	0,	0,	0,	16,
+	 //Classic: régi animáció "retro"
+	 // hossz: 8 sor
+	  15,	0,	15,	0,	0,	15,	15,	0,	0,	15,	0,	15,	15,	0,	16,
+	  0,	15,	0,	15,	15,	0,	0,	15,	15,	0,	15,	0,	0,	0,	16,
+	  15,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	15,	0,	0,	16,
+	  0,	15,	0,	15,	15,	0,	0,	15,	15,	0,	15,	0,	0,	0,	16,
+	  15,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	15,	0,	0,	16,
+	  0,	0,	0,	15,	0,	0,	0,	0,	15,	0,	0,	0,	0,	0,	16,
+	  15,	0,	15,	0,	0,	15,	15,	0,	15,	0,	0,	15,	15,	0,	16,
+	  0,	0,	0,	15,	0,	0,	0,	0,	15,	0,	0,	0,	0,	0,	16,
 
-	 //8 => 8 ---
-	 //Fade circle
+	 //Fade circle: egy pont megy körbe körbe a LED-ek között fadelve
+	 // hossz: 14
 	 15,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	/*ismétlés*/	0,	/*várakozás*/	1,
 	 -1,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	/*ismétlés*/	15,	/*várakozás*/	130/30,
-	 0,	-1,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	/*ismétlés*/	15,	/*várakozás*/	130/30,
-	 0,	0,	-1,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	/*ismétlés*/	15,	/*várakozás*/	130/30,
-	 0,	0,	0,	-1,	1,	0,	0,	0,	0,	0,	0,	0,	0,	/*ismétlés*/	15,	/*várakozás*/	130/30,
-	 0,	0,	0,	0,	-1,	1,	0,	0,	0,	0,	0,	0,	0,	/*ismétlés*/	15,	/*várakozás*/	130/30,
-	 0,	0,	0,	0,	0,	-1,	0,	0,	0,	0,	0,	0,	1,	/*ismétlés*/	15,	/*várakozás*/	130/30,
-	 0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	-1,	/*ismétlés*/	15,	/*várakozás*/	130/30,
-	 0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	-1,	0,	/*ismétlés*/	15,	/*várakozás*/	130/30,
-	 0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	-1,	0,	0,	/*ismétlés*/	15,	/*várakozás*/	130/30,
-	 0,	0,	0,	0,	0,	0,	0,	0,	1,	-1,	0,	0,	0,	/*ismétlés*/	15,	/*várakozás*/	130/30,
-	 0,	0,	0,	0,	0,	0,	0,	1,	-1,	0,	0,	0,	0,	/*ismétlés*/	15,	/*várakozás*/	130/30,
-	 0,	0,	0,	0,	0,	0,	1,	-1,	0,	0,	0,	0,	0,	/*ismétlés*/	15,	/*várakozás*/	130/30,
-	 1,	0,	0,	0,	0,	0,	-1,	0,	0,	0,	0,	0,	0,	/*ismétlés*/	15,	/*várakozás*/	130/30,
-	 //14 => 22
+	  0,	-1,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	/*ismétlés*/	15,	/*várakozás*/	130/30,
+	  0,	0,	-1,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	/*ismétlés*/	15,	/*várakozás*/	130/30,
+	  0,	0,	0,	-1,	1,	0,	0,	0,	0,	0,	0,	0,	0,	/*ismétlés*/	15,	/*várakozás*/	130/30,
+	  0,	0,	0,	0,	-1,	1,	0,	0,	0,	0,	0,	0,	0,	/*ismétlés*/	15,	/*várakozás*/	130/30,
+	  0,	0,	0,	0,	0,	-1,	0,	0,	0,	0,	0,	0,	1,	/*ismétlés*/	15,	/*várakozás*/	130/30,
+	  0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	-1,	/*ismétlés*/	15,	/*várakozás*/	130/30,
+	  0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	-1,	0,	/*ismétlés*/	15,	/*várakozás*/	130/30,
+	  0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	-1,	0,	0,	/*ismétlés*/	15,	/*várakozás*/	130/30,
+	  0,	0,	0,	0,	0,	0,	0,	0,	1,	-1,	0,	0,	0,	/*ismétlés*/	15,	/*várakozás*/	130/30,
+	  0,	0,	0,	0,	0,	0,	0,	1,	-1,	0,	0,	0,	0,	/*ismétlés*/	15,	/*várakozás*/	130/30,
+	  0,	0,	0,	0,	0,	0,	1,	-1,	0,	0,	0,	0,	0,	/*ismétlés*/	15,	/*várakozás*/	130/30,
+	  1,	0,	0,	0,	0,	0,	-1,	0,	0,	0,	0,	0,	0,	/*ismétlés*/	15,	/*várakozás*/	130/30,
+	 
+	 //Fade ring: felváltva fadelõdnek az egymás melletti ledek
+	 // hossz: 3
+	 15,	1,	15,	1,	15,	1,	15,	1,	15,	1,	15,	1,	15,	/*ismétlés*/	0,	/*várakozás*/	1,
+	 -1,	1,	-1,	1,	-1,	1,	-1,	1,	-1,	1,	-1,	1,	-1,	/*ismétlés*/	14,	/*várakozás*/	130/25,
+	  1,	-1,	1,	-1,	1,	-1,	1,	-1,	1,	-1,	1,	-1,	1,	/*ismétlés*/	14,	/*várakozás*/	130/25,
+	 
+	 //Csordogáló jég: fentrõl lefelé szimmetrikus 2 fénypont csóvával
+	 // hossz: 9
+	 /*	B1		B2	B3	B4	B5	B6	J1	J2	J3	J4	J5	J6	CS	*/
+		 0,		0,	14,	7,	0,	0,	0,	0,	14,	7,	0,	0,	14,	/*ismétlés*/	0,	/*várakozás*/	1,
+		 0,		2,	-1,	-1,	0,	2,	0,	2,	-1,	-1,	0,	2,	-1,	/*ismétlés*/	7,	/*várakozás*/	130/25,
+		 2,		-1,	-1,	0,	2,	-1,	2,	-1,	-1,	0,	2,	-1,	-1,	/*ismétlés*/	7,	/*várakozás*/	130/25,
+		 -1,	-1,	0,	2,	-1,	-1,	-1,	-1,	0,	2,	-1,	-1,	0,	/*ismétlés*/	7,	/*várakozás*/	130/25,
+		 -1,	0,	2,	-1,	-1,	0,	-1,	0,	2,	-1,	-1,	0,	2,	/*ismétlés*/	7,	/*várakozás*/	130/25,
+		 0,		2,	-1,	-1,	0,	2,	0,	2,	-1,	-1,	0,	2,	-1,	/*ismétlés*/	7,	/*várakozás*/	130/25,
+		 2,		-1,	-1,	0,	2,	-1,	2,	-1,	-1,	0,	2,	-1,	-1,	/*ismétlés*/	7,	/*várakozás*/	130/25,
+		 -1,	-1,	0,	2,	-1,	-1,	-1,	-1,	0,	2,	-1,	-1,	0,	/*ismétlés*/	7,	/*várakozás*/	130/25,
+		 -1,	0,	2,	-1,	-1,	0,	-1,	0,	2,	-1,	-1,	0,	2,	/*ismétlés*/	7,	/*várakozás*/	130/25,
+	
+	 
 	 //fel, le villog
-	 15,	15,	15,	15,	15,	15,	15,	15,	15,	15,	15,	15,	15,	/*ismétlés*/	0,	/*várakozás*/	130,
-	 0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	/*ismétlés*/	0,	/*várakozás*/	130,
+	 // hossz: 2
+	  15,	15,	15,	15,	15,	15,	15,	15,	15,	15,	15,	15,	15,	/*ismétlés*/	0,	/*várakozás*/	130,
+	  0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	/*ismétlés*/	0,	/*várakozás*/	130,
 	 
 	 //2 => 24 ---
 	 //fel, le fade-el
+	 // hossz: 3
 	 0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	/*ismétlés*/	0,	/*várakozás*/	1,
 	 1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	/*ismétlés*/	15,	/*várakozás*/	130/8,
 	 -1,	-1,	-1,	-1,	-1,	-1,	-1,	-1,	-1,	-1,	-1,	-1,	-1,	/*ismétlés*/	15,	/*várakozás*/	130/8,
 	 
 	 //3 => 27 ---
 	 //pseudorandomfade
+	 // hossz: 14
 	 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0,  /*ismétlés*/ 15, /*várakozás*/ 8, /*7*/
 	 0, 0, 1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 8, /*2*/
 	 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 8, /*10*/
@@ -64,8 +128,10 @@
 	 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, -1, /*ismétlés*/ 15, /*várakozás*/ 8, /*9*/
 	 0, 0, 0, 0, 1, 0, 0, 0, 0, -1, 0, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 8, /*4*/
 	 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 8, /*reset*/
+	 
 	 //17 => 41
 	 //lalirandomja
+	 // hossz: 20
 	 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  /*ismétlés*/ 0, /*várakozás*/ 10,
 	 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0,  /*ismétlés*/ 15, /*várakozás*/ 7,
 	 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 7,
@@ -86,8 +152,10 @@
 	 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 3,
 	 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 3,
 	 -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /*ismétlés*/ 15, /*várakozás*/ 3,
+	 
 	 //20 => 61
 	 //fadevertic
+	 // hossz: 18
 	 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  /*ismétlés*/ 0, /*várakozás*/ 1,
 	 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0,  /*ismétlés*/ 15, /*várakozás*/ 2,
 	 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0,  /*ismétlés*/ 15, /*várakozás*/ 2,
