@@ -4,6 +4,10 @@
  * Created: 2018. 12. 07. 18:02:14
  * Author : Tomi
  */ 
+//#define _TYPE_TREE
+#define _TYPE_MEZI
+//#define _TYPE_SNOWMAN
+//#define _TYPE_STAR
 
 #define F_CPU 1000000UL  // 1 MHz
 #include <avr/io.h>
@@ -46,7 +50,10 @@ volatile byte system_cnt = 0;
 volatile byte sec_cnt = 0;
 volatile word turnoff_cnt = AUTO_TURNOFF_TIME;
 
-void show_battery();
+static inline __attribute__((always_inline)) void show_battery();
+void show_battery_tree();
+void show_battery_mezi();
+void show_battery_snowman();
 void switch_mode(byte newmode);
 
 void init_timer0()
@@ -211,17 +218,30 @@ void anim1()
 	}
 }
 
-void show_battery()
+static inline __attribute__((always_inline)) void show_battery()
+{
+	#if defined(_TYPE_TREE) || defined(_TYPE_STAR)
+	show_battery_tree();
+	#endif
+	#ifdef _TYPE_MEZI
+	show_battery_tree();
+	#endif
+	#ifdef _TYPE_SNOWMAN
+	show_battery_snowman();
+	#endif
+}
+
+void show_battery_mezi()
 {
 	initAD();
 	PORTA = 0x0;
-	byte battery = 0;
+	word battery = 64;
 	for (byte i = 0; i < 1; i++)
 	{
 		battery += batteryMeasure();
 		_delay_ms(1);
 	}
-	battery >>= 0;
+	battery >>= 6;
 	disableAD();
 
 	anim_manual_enable = 1;
@@ -235,8 +255,8 @@ void show_battery()
 	{
 		for (byte j = 0; j <= min(i, 5); j++)
 		{
-			anim_manual[j] = 15;
-			anim_manual[j+6] = 15;
+			anim_manual[11-j] = 15;
+			anim_manual[5-j] = 15;
 		}
 		if (i == 6) anim_manual[12] = 15;
 		anim_manual_done = 1;
@@ -249,18 +269,140 @@ void show_battery()
 	{
 		for (byte j = 0; j < 6; j++)
 		{
-			anim_manual[j] = 0;
-			anim_manual[j+6] = 0;
+			anim_manual[11-j] = 0;
+			anim_manual[5-j] = 0;
 			if (j < i-1)
 			{
-				anim_manual[j] = 15;
-				anim_manual[j+6] = 15;
+				anim_manual[11-j] = 15;
+				anim_manual[5-j] = 15;
 			}
 		}
 		anim_manual[12] = 0;
 		//if (i == 6) anim_manual[12] = 15;
 		anim_manual_done = 1;
 		while(anim_manual_done);
+	}
+	for (byte i = 0; i < 3; i++)
+	{
+		anim_manual[14] = 130;
+		anim_manual_done = 1;
+		while(anim_manual_done);
+	}
+}
+
+void show_battery_tree()
+{
+	initAD();
+	PORTA = 0x0;
+	word battery = 64;
+	for (byte i = 0; i < 1; i++)
+	{
+		battery += batteryMeasure();
+		_delay_ms(1);
+	}
+	battery >>= 6;
+	disableAD();
+
+	anim_manual_enable = 1;
+	if (battery >= 7) battery = 7;
+	sei();
+	while(anim_manual_done);
+	
+	anim_manual[13] = 0;
+	anim_manual[14] = 3;
+	for (byte i = 0; i < 7; i++)
+	{
+		for (sbyte light = 1; light < 15; light++)
+		{
+			if (i <= 5)
+			{
+				anim_manual[i] = light;
+				anim_manual[i+6] = light;
+			}
+			if (i == 6) anim_manual[12] = light;
+			
+			anim_manual_done = 1;
+			while(anim_manual_done);
+		}
+	}
+	
+	for (sbyte i = 7; i != battery; i--)
+	{
+		for (sbyte light = 14; light >= 0; light--)
+		{
+			if (i == 7)
+				anim_manual[12] = light;
+			if (i <= 6 && i > 1)
+			{
+				anim_manual[i-1] = light;
+				anim_manual[i+6-1] = light;
+			}
+			anim_manual_done = 1;
+			while(anim_manual_done);
+		}
+	}
+	for (byte i = 0; i < 3; i++)
+	{
+		anim_manual[14] = 130;
+		anim_manual_done = 1;
+		while(anim_manual_done);
+	}
+}
+
+void show_battery_snowman()
+{
+	initAD();
+	PORTA = 0x0;
+	word battery = 0;
+	for (byte i = 0; i < 64; i++)
+	{
+		battery += batteryMeasure();
+		_delay_ms(1);
+	}
+	battery >>= 6;
+	disableAD();
+	anim_manual_enable = 1;
+	if (battery >= 7) battery = 7;
+	sei();
+	while(anim_manual_done);
+	
+	anim_manual[13] = 0;
+	anim_manual[14] = 1;//13;
+	for (sbyte i = 0; i < 7; i++)
+	{
+		for (sbyte light = 1; light < 15; light++)
+		{
+			if (i <= 4)
+			{
+				anim_manual[11-i] = light;
+				anim_manual[5-i] = light;
+			}
+			if (i == 5) anim_manual[12] = light;
+			anim_manual[0] = i == 6 ? light : 0;
+			anim_manual[6] = i == 6 ? light : 0;
+				
+			anim_manual_done = 1;
+			while(anim_manual_done);
+		}
+	}
+	for (sbyte i = 7; i != battery; i--)
+	{
+		for (sbyte light = 14; light >= 0; light--)
+		{
+			if (i == 7)
+			{
+				anim_manual[0] = light;
+				anim_manual[6] = light;
+			}
+			if (i == 6) anim_manual[12] = light;
+			if (i <= 5 && i > 1)
+			{
+				anim_manual[12-i] = light;
+				anim_manual[6-i] = light;
+			}
+			anim_manual_done = 1;
+			while(anim_manual_done);
+		}
 	}
 	for (byte i = 0; i < 3; i++)
 	{
@@ -437,17 +579,30 @@ ISR(TIM0_OVF_vect)
 		set_oldal_jobb();
 		idx_min = 6;
 		idx_max = 11;
+		#if defined(_TYPE_TREE) || defined(_TYPE_STAR)
 		out = (anim_out[12] & 0x1) << 1; //top led
+		#endif
 		anim_out[12] >>= 1;
 	}
 	TCNT0 = pwmshift;
 
+	#if defined(_TYPE_TREE) || defined(_TYPE_STAR)
 	for (byte i = idx_min; i <= idx_max; i++) //106 órajelciklus
 	{
 		out |= (anim_out[i] & 0x1);
 		out <<= 1;
 		anim_out[i] >>= 1;
 	}
+	#endif
+	#if defined(_TYPE_MEZI) || defined(_TYPE_SNOWMAN)
+	for (byte i = idx_min; i <= idx_max; i++) //106 órajelciklus
+	{
+		out |= (anim_out[i] & 0x1) << 7;
+		out >>= 1;
+		anim_out[i] >>= 1;
+	}
+	out |= (anim_out[12] & 0x1) << 7; //top led
+	#endif
 	PORTA = out;
 	
 	if (pwmcnt == 3 && oldal == BAL) //kövi lépésben új animáció kerül ki
