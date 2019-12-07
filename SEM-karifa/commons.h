@@ -9,6 +9,11 @@
 #ifndef COMMONS_H_
 #define COMMONS_H_
 
+//#define _TYPE_TREE
+//#define _TYPE_MEZI
+#define _TYPE_SNOWMAN
+//#define _TYPE_STAR
+
 #include <stdint.h>
 
 // Alap típusok definiálása.

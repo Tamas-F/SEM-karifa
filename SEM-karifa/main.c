@@ -1,13 +1,9 @@
 /*
- * SEM-karifa.c
- *
- * Created: 2018. 12. 07. 18:02:14
- * Author : Tomi
- */ 
-//#define _TYPE_TREE
-#define _TYPE_MEZI
-//#define _TYPE_SNOWMAN
-//#define _TYPE_STAR
+* SEM-karifa.c
+*
+* Created: 2018. 12. 07. 18:02:14
+* Author : Tomi
+*/
 
 #define F_CPU 1000000UL  // 1 MHz
 #include <avr/io.h>
@@ -50,10 +46,7 @@ volatile byte system_cnt = 0;
 volatile byte sec_cnt = 0;
 volatile word turnoff_cnt = AUTO_TURNOFF_TIME;
 
-static inline __attribute__((always_inline)) void show_battery();
-void show_battery_tree();
-void show_battery_mezi();
-void show_battery_snowman();
+void show_battery();
 void switch_mode(byte newmode);
 
 void init_timer0()
@@ -118,7 +111,7 @@ void init_anims()
 	
 	system_cnt = 0;
 	
-	sec_cnt = 0;	
+	sec_cnt = 0;
 	turnoff_cnt = AUTO_TURNOFF_TIME;
 }
 
@@ -144,7 +137,7 @@ void goto_sleep()
 		button0_proc();
 	}
 	button0_status.Released = 0;
-//	while(!bit_get(&button0_PIN, button0_BIT));	//itt meg kell várni, hogy elengedjük a gombot a gombos cuccodat nem sikerült mûködésre bírnom, de te biztos vágod hogyan kell
+	//	while(!bit_get(&button0_PIN, button0_BIT));	//itt meg kell várni, hogy elengedjük a gombot a gombos cuccodat nem sikerült mûködésre bírnom, de te biztos vágod hogyan kell
 	_delay_ms(1);	//ez a bemenet "feltöltõdése"/stabilizálódása miatt kell
 
 
@@ -218,27 +211,14 @@ void anim1()
 	}
 }
 
-static inline __attribute__((always_inline)) void show_battery()
-{
-	#if defined(_TYPE_TREE) || defined(_TYPE_STAR)
-	show_battery_tree();
-	#endif
-	#ifdef _TYPE_MEZI
-	show_battery_tree();
-	#endif
-	#ifdef _TYPE_SNOWMAN
-	show_battery_snowman();
-	#endif
-}
-
-void show_battery_mezi()
+void show_battery()
 {
 	initAD();
 	PORTA = 0x0;
-	word battery = 64;
-	for (byte i = 0; i < 1; i++)
+	word battery = 0;
+	for (byte i = 0; i < 64; i++)
 	{
-		battery += batteryMeasure();
+		battery += 0;//(word)batteryMeasure();
 		_delay_ms(1);
 	}
 	battery >>= 6;
@@ -250,76 +230,28 @@ void show_battery_mezi()
 	while(anim_manual_done);
 	
 	anim_manual[13] = 0;
-	anim_manual[14] = 13;
-	for (byte i = 0; i < 7; i++)
-	{
-		for (byte j = 0; j <= min(i, 5); j++)
-		{
-			anim_manual[11-j] = 15;
-			anim_manual[5-j] = 15;
-		}
-		if (i == 6) anim_manual[12] = 15;
-		anim_manual_done = 1;
-		while(anim_manual_done);
-	}
-	
-	anim_manual[13] = 0;
-	anim_manual[14] = 13;
-	for (byte i = 7; i != battery; i--)
-	{
-		for (byte j = 0; j < 6; j++)
-		{
-			anim_manual[11-j] = 0;
-			anim_manual[5-j] = 0;
-			if (j < i-1)
-			{
-				anim_manual[11-j] = 15;
-				anim_manual[5-j] = 15;
-			}
-		}
-		anim_manual[12] = 0;
-		//if (i == 6) anim_manual[12] = 15;
-		anim_manual_done = 1;
-		while(anim_manual_done);
-	}
-	for (byte i = 0; i < 3; i++)
-	{
-		anim_manual[14] = 130;
-		anim_manual_done = 1;
-		while(anim_manual_done);
-	}
-}
-
-void show_battery_tree()
-{
-	initAD();
-	PORTA = 0x0;
-	word battery = 64;
-	for (byte i = 0; i < 1; i++)
-	{
-		battery += batteryMeasure();
-		_delay_ms(1);
-	}
-	battery >>= 6;
-	disableAD();
-
-	anim_manual_enable = 1;
-	if (battery >= 7) battery = 7;
-	sei();
-	while(anim_manual_done);
-	
-	anim_manual[13] = 0;
-	anim_manual[14] = 3;
+	anim_manual[14] = 1;
 	for (byte i = 0; i < 7; i++)
 	{
 		for (sbyte light = 1; light < 15; light++)
 		{
+			#if defined(_TYPE_SNOWMAN)
+			if (i <= 4)
+			{
+				anim_manual[i] = light;
+				anim_manual[i+6] = light;
+			}
+			if (i == 5) anim_manual[12] = light;
+			anim_manual[5] = i == 6 ? light : 0;
+			anim_manual[11] = i == 6 ? light : 0;
+			#else
 			if (i <= 5)
 			{
 				anim_manual[i] = light;
 				anim_manual[i+6] = light;
 			}
 			if (i == 6) anim_manual[12] = light;
+			#endif
 			
 			anim_manual_done = 1;
 			while(anim_manual_done);
@@ -330,76 +262,28 @@ void show_battery_tree()
 	{
 		for (sbyte light = 14; light >= 0; light--)
 		{
+			#if defined(_TYPE_SNOWMAN)
 			if (i == 7)
-				anim_manual[12] = light;
+			{
+				anim_manual[5] = light;
+				anim_manual[11] = light;
+			}
+			if (i == 6) anim_manual[12] = light;
+			if (i <= 5 && i > 1)
+			{
+				anim_manual[i-1] = light;
+				anim_manual[i+6-1] = light;
+			}
+			#else		
+			if (i == 7)
+			anim_manual[12] = light;
 			if (i <= 6 && i > 1)
 			{
 				anim_manual[i-1] = light;
 				anim_manual[i+6-1] = light;
 			}
-			anim_manual_done = 1;
-			while(anim_manual_done);
-		}
-	}
-	for (byte i = 0; i < 3; i++)
-	{
-		anim_manual[14] = 130;
-		anim_manual_done = 1;
-		while(anim_manual_done);
-	}
-}
+			#endif
 
-void show_battery_snowman()
-{
-	initAD();
-	PORTA = 0x0;
-	word battery = 0;
-	for (byte i = 0; i < 64; i++)
-	{
-		battery += batteryMeasure();
-		_delay_ms(1);
-	}
-	battery >>= 6;
-	disableAD();
-	anim_manual_enable = 1;
-	if (battery >= 7) battery = 7;
-	sei();
-	while(anim_manual_done);
-	
-	anim_manual[13] = 0;
-	anim_manual[14] = 1;//13;
-	for (sbyte i = 0; i < 7; i++)
-	{
-		for (sbyte light = 1; light < 15; light++)
-		{
-			if (i <= 4)
-			{
-				anim_manual[11-i] = light;
-				anim_manual[5-i] = light;
-			}
-			if (i == 5) anim_manual[12] = light;
-			anim_manual[0] = i == 6 ? light : 0;
-			anim_manual[6] = i == 6 ? light : 0;
-				
-			anim_manual_done = 1;
-			while(anim_manual_done);
-		}
-	}
-	for (sbyte i = 7; i != battery; i--)
-	{
-		for (sbyte light = 14; light >= 0; light--)
-		{
-			if (i == 7)
-			{
-				anim_manual[0] = light;
-				anim_manual[6] = light;
-			}
-			if (i == 6) anim_manual[12] = light;
-			if (i <= 5 && i > 1)
-			{
-				anim_manual[12-i] = light;
-				anim_manual[6-i] = light;
-			}
 			anim_manual_done = 1;
 			while(anim_manual_done);
 		}
@@ -455,7 +339,7 @@ int main(void)
 	show_battery();
 	
 	init_anims();
-//	switch_mode(0);
+	//	switch_mode(0);
 	sei();
 	while (1)
 	{
@@ -501,10 +385,10 @@ int main(void)
 				button0_status.Clicked = 0;
 				if (mode < ANIM_NUM)
 				{
-						if (mode == ANIM_NUM - 1)
-							switch_mode(0);
-						else
-							switch_mode(mode + 1);
+					if (mode == ANIM_NUM - 1)
+					switch_mode(0);
+					else
+					switch_mode(mode + 1);
 				}
 				else
 				{
@@ -512,17 +396,17 @@ int main(void)
 				}
 				//switch (mode)
 				//{
-					//case 0:
-					//case 1:
-					//case 2:
-						//if (mode == 2)
-							//switch_mode(0);
-						//else
-							//switch_mode(mode + 1);
-					//break;
-					//default:
-						//switch_mode(0);
-					//break;
+				//case 0:
+				//case 1:
+				//case 2:
+				//if (mode == 2)
+				//switch_mode(0);
+				//else
+				//switch_mode(mode + 1);
+				//break;
+				//default:
+				//switch_mode(0);
+				//break;
 				//}
 			}
 		}
@@ -550,7 +434,7 @@ ISR(TIM1_OVF_vect)
 {
 	tmr_dec_byte(&system_cnt);
 	TCNT1H = 0xFF;
-	TCNT1L = 0xFF;	
+	TCNT1L = 0xFF;
 }
 
 ISR(TIM0_OVF_vect)
@@ -593,8 +477,7 @@ ISR(TIM0_OVF_vect)
 		out <<= 1;
 		anim_out[i] >>= 1;
 	}
-	#endif
-	#if defined(_TYPE_MEZI) || defined(_TYPE_SNOWMAN)
+	#elif defined(_TYPE_MEZI) || defined(_TYPE_SNOWMAN)
 	for (byte i = idx_min; i <= idx_max; i++) //106 órajelciklus
 	{
 		out |= (anim_out[i] & 0x1) << 7;
