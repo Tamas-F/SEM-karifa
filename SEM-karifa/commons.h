@@ -11,8 +11,8 @@
 
 //#define _TYPE_TREE
 //#define _TYPE_MEZI
-#define _TYPE_SNOWMAN
-//#define _TYPE_STAR
+//#define _TYPE_SNOWMAN
+#define _TYPE_STAR
 
 #include <stdint.h>
 

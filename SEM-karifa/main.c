@@ -218,7 +218,7 @@ void show_battery()
 	word battery = 0;
 	for (byte i = 0; i < 64; i++)
 	{
-		battery += 0;//(word)batteryMeasure();
+		battery += (word)batteryMeasure();
 		_delay_ms(1);
 	}
 	battery >>= 6;
